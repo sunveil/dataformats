@@ -25,7 +25,7 @@ source modules for the following languages:
 ### Example for Java
 
 To use reader you need to include Hiscore.java to project. If you use maven include this in pom file:
-```xml
+``` xml
     <dependencies>
         <dependency>
             <groupId>io.kaitai</groupId>
@@ -39,19 +39,19 @@ Alternatively, you can just copy whole source code to one’s project: the libra
 
 Parsing a structure directly from a local file:
 
-```java	
+``` java	
     Hiscore hiscore = Hiscore.fromFile(anExampleHiscoreFile);
 ```
 
 Parsing a structure from a byte array (byte[]):
 
-```java	
+``` java	
     Hiscore hiscore = new Hiscore(new KaitaiStream(byteArray));
 ```
 
 The hiscore file is array of packages. The file itself starts with two blocks: first comes `header` and then comes `data_block`. 
 
-```java	
+``` java	
 	// get package
 	Hiscore.Package package = hiscore.packages().get(0);
 	// read package size in bytes
