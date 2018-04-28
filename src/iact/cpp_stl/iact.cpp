@@ -35,13 +35,13 @@ iact_t::package_t::package_t(kaitai::kstream* p__io, iact_t* p__parent, iact_t* 
 }
 
 void iact_t::package_t::_read() {
-    m_hdr = new header_t(m__io, this, m__root);
+    m_header = new header_t(m__io, this, m__root);
     m_data = new data_t(m__io, this, m__root);
     m_end_of_file = m__io->ensure_fixed_contents(std::string("\xFF\xFF\xFF\xFF", 4));
 }
 
 iact_t::package_t::~package_t() {
-    delete m_hdr;
+    delete m_header;
     delete m_data;
 }
 
@@ -81,6 +81,20 @@ void iact_t::chanel_t::_read() {
 iact_t::chanel_t::~chanel_t() {
 }
 
+iact_t::maroc_struct_t::maroc_struct_t(kaitai::kstream* p__io, iact_t::header_t* p__parent, iact_t* p__root) : kaitai::kstruct(p__io) {
+    m__parent = p__parent;
+    m__root = p__root;
+    _read();
+}
+
+void iact_t::maroc_struct_t::_read() {
+    m_maroc_nuber = m__io->read_bits_int(5);
+    m_skip = m__io->read_bits_int(27);
+}
+
+iact_t::maroc_struct_t::~maroc_struct_t() {
+}
+
 iact_t::header_t::header_t(kaitai::kstream* p__io, iact_t::package_t* p__parent, iact_t* p__root) : kaitai::kstruct(p__io) {
     m__parent = p__parent;
     m__root = p__root;
@@ -89,30 +103,16 @@ iact_t::header_t::header_t(kaitai::kstream* p__io, iact_t::package_t* p__parent,
 
 void iact_t::header_t::_read() {
     m_magic = m__io->ensure_fixed_contents(std::string("\xD8\x0B", 2));
-    m_sz = m__io->read_u2le();
-    m_event_number1 = m__io->read_u4le();
-    m_stop_position = m__io->read_u4le();
+    m_size = m__io->read_u2le();
+    m_event_number = m__io->read_u4le();
+    m_reserved = m__io->read_u4le();
     m_time = new time_t(m__io, this, m__root);
-    m_maroc_strcut = new maroc_strcut_t(m__io, this, m__root);
+    m_maroc_struct = new maroc_struct_t(m__io, this, m__root);
 }
 
 iact_t::header_t::~header_t() {
     delete m_time;
-    delete m_maroc_strcut;
-}
-
-iact_t::maroc_strcut_t::maroc_strcut_t(kaitai::kstream* p__io, iact_t::header_t* p__parent, iact_t* p__root) : kaitai::kstruct(p__io) {
-    m__parent = p__parent;
-    m__root = p__root;
-    _read();
-}
-
-void iact_t::maroc_strcut_t::_read() {
-    m_maroc_nuber = m__io->read_bits_int(5);
-    m_skip = m__io->read_bits_int(27);
-}
-
-iact_t::maroc_strcut_t::~maroc_strcut_t() {
+    delete m_maroc_struct;
 }
 
 iact_t::time_t::time_t(kaitai::kstream* p__io, iact_t::header_t* p__parent, iact_t* p__root) : kaitai::kstruct(p__io) {

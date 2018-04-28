@@ -34,7 +34,7 @@ function Iact.Package:_init(io, parent, root)
 end
 
 function Iact.Package:_read()
-  self.hdr = Iact.Header(self._io, self, self._root)
+  self.header = Iact.Header(self._io, self, self._root)
   self.data = Iact.Data(self._io, self, self._root)
   self.end_of_file = self._io:ensure_fixed_contents("\255\255\255\255")
 end
@@ -72,6 +72,21 @@ function Iact.Chanel:_read()
 end
 
 
+Iact.MarocStruct = class.class(KaitaiStruct)
+
+function Iact.MarocStruct:_init(io, parent, root)
+  KaitaiStruct._init(self, io)
+  self._parent = parent
+  self._root = root or self
+  self:_read()
+end
+
+function Iact.MarocStruct:_read()
+  self.maroc_nuber = self._io:read_bits_int(5)
+  self.skip = self._io:read_bits_int(27)
+end
+
+
 Iact.Header = class.class(KaitaiStruct)
 
 function Iact.Header:_init(io, parent, root)
@@ -83,26 +98,11 @@ end
 
 function Iact.Header:_read()
   self.magic = self._io:ensure_fixed_contents("\216\011")
-  self.sz = self._io:read_u2le()
-  self.event_number1 = self._io:read_u4le()
-  self.stop_position = self._io:read_u4le()
+  self.size = self._io:read_u2le()
+  self.event_number = self._io:read_u4le()
+  self.reserved = self._io:read_u4le()
   self.time = Iact.Time(self._io, self, self._root)
-  self.maroc_strcut = Iact.MarocStrcut(self._io, self, self._root)
-end
-
-
-Iact.MarocStrcut = class.class(KaitaiStruct)
-
-function Iact.MarocStrcut:_init(io, parent, root)
-  KaitaiStruct._init(self, io)
-  self._parent = parent
-  self._root = root or self
-  self:_read()
-end
-
-function Iact.MarocStrcut:_read()
-  self.maroc_nuber = self._io:read_bits_int(5)
-  self.skip = self._io:read_bits_int(27)
+  self.maroc_struct = Iact.MarocStruct(self._io, self, self._root)
 end
 
 

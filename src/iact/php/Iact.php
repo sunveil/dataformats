@@ -28,14 +28,14 @@ class Package extends \Kaitai\Struct\Struct {
     }
 
     private function _read() {
-        $this->_m_hdr = new \Iact\Header($this->_io, $this, $this->_root);
+        $this->_m_header = new \Iact\Header($this->_io, $this, $this->_root);
         $this->_m_data = new \Iact\Data($this->_io, $this, $this->_root);
         $this->_m_endOfFile = $this->_io->ensureFixedContents("\xFF\xFF\xFF\xFF");
     }
-    protected $_m_hdr;
+    protected $_m_header;
     protected $_m_data;
     protected $_m_endOfFile;
-    public function hdr() { return $this->_m_hdr; }
+    public function header() { return $this->_m_header; }
     public function data() { return $this->_m_data; }
     public function endOfFile() { return $this->_m_endOfFile; }
 }
@@ -79,37 +79,7 @@ class Chanel extends \Kaitai\Struct\Struct {
 
 namespace \Iact;
 
-class Header extends \Kaitai\Struct\Struct {
-    public function __construct(\Kaitai\Struct\Stream $_io, \Iact\Package $_parent = null, \Iact $_root = null) {
-        parent::__construct($_io, $_parent, $_root);
-        $this->_read();
-    }
-
-    private function _read() {
-        $this->_m_magic = $this->_io->ensureFixedContents("\xD8\x0B");
-        $this->_m_sz = $this->_io->readU2le();
-        $this->_m_eventNumber1 = $this->_io->readU4le();
-        $this->_m_stopPosition = $this->_io->readU4le();
-        $this->_m_time = new \Iact\Time($this->_io, $this, $this->_root);
-        $this->_m_marocStrcut = new \Iact\MarocStrcut($this->_io, $this, $this->_root);
-    }
-    protected $_m_magic;
-    protected $_m_sz;
-    protected $_m_eventNumber1;
-    protected $_m_stopPosition;
-    protected $_m_time;
-    protected $_m_marocStrcut;
-    public function magic() { return $this->_m_magic; }
-    public function sz() { return $this->_m_sz; }
-    public function eventNumber1() { return $this->_m_eventNumber1; }
-    public function stopPosition() { return $this->_m_stopPosition; }
-    public function time() { return $this->_m_time; }
-    public function marocStrcut() { return $this->_m_marocStrcut; }
-}
-
-namespace \Iact;
-
-class MarocStrcut extends \Kaitai\Struct\Struct {
+class MarocStruct extends \Kaitai\Struct\Struct {
     public function __construct(\Kaitai\Struct\Stream $_io, \Iact\Header $_parent = null, \Iact $_root = null) {
         parent::__construct($_io, $_parent, $_root);
         $this->_read();
@@ -123,6 +93,36 @@ class MarocStrcut extends \Kaitai\Struct\Struct {
     protected $_m_skip;
     public function marocNuber() { return $this->_m_marocNuber; }
     public function skip() { return $this->_m_skip; }
+}
+
+namespace \Iact;
+
+class Header extends \Kaitai\Struct\Struct {
+    public function __construct(\Kaitai\Struct\Stream $_io, \Iact\Package $_parent = null, \Iact $_root = null) {
+        parent::__construct($_io, $_parent, $_root);
+        $this->_read();
+    }
+
+    private function _read() {
+        $this->_m_magic = $this->_io->ensureFixedContents("\xD8\x0B");
+        $this->_m_size = $this->_io->readU2le();
+        $this->_m_eventNumber = $this->_io->readU4le();
+        $this->_m_reserved = $this->_io->readU4le();
+        $this->_m_time = new \Iact\Time($this->_io, $this, $this->_root);
+        $this->_m_marocStruct = new \Iact\MarocStruct($this->_io, $this, $this->_root);
+    }
+    protected $_m_magic;
+    protected $_m_size;
+    protected $_m_eventNumber;
+    protected $_m_reserved;
+    protected $_m_time;
+    protected $_m_marocStruct;
+    public function magic() { return $this->_m_magic; }
+    public function size() { return $this->_m_size; }
+    public function eventNumber() { return $this->_m_eventNumber; }
+    public function reserved() { return $this->_m_reserved; }
+    public function time() { return $this->_m_time; }
+    public function marocStruct() { return $this->_m_marocStruct; }
 }
 
 namespace \Iact;

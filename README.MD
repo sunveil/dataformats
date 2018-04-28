@@ -26,7 +26,11 @@ source modules for the following languages:
 
 To use reader you need to include Hiscore.java to project. If you use maven include this in pom file:
 
+<<<<<<< HEAD
+``` xml
+=======
 ~~~ xml
+>>>>>>> fc324a3781dee95bbbf6390c383aae2450fbcdf1
     <dependencies>
         <dependency>
             <groupId>io.kaitai</groupId>
@@ -34,12 +38,31 @@ To use reader you need to include Hiscore.java to project. If you use maven incl
             <version>0.8</version>
         </dependency>
     </dependencies>
+<<<<<<< HEAD
+```
+=======
 ~~~
+>>>>>>> fc324a3781dee95bbbf6390c383aae2450fbcdf1
 
 Alternatively, you can just copy whole source code to one’s project: the library is intentionally kept as only 5 `.java` [files](https://github.com/kaitai-io/kaitai_struct_java_runtime), so it should be easy enough as well.
 
 Parsing a structure directly from a local file:
 
+<<<<<<< HEAD
+``` java	
+    Hiscore hiscore = Hiscore.fromFile(anExampleHiscoreFile);
+```
+
+Parsing a structure from a byte array (byte[]):
+
+``` java	
+    Hiscore hiscore = new Hiscore(new KaitaiStream(byteArray));
+```
+
+The hiscore file is array of packages. The file itself starts with two blocks: first comes `header` and then comes `data_block`. 
+
+``` java	
+=======
 ~~~ java	
     Hiscore hiscore = Hiscore.fromFile(anExampleHiscoreFile);
 ~~~
@@ -53,11 +76,16 @@ Parsing a structure from a byte array (byte[]):
 The hiscore file is array of packages. The file itself starts with two blocks: first comes `header` and then comes `data_block`. 
 
 ~~~ java	
+>>>>>>> fc324a3781dee95bbbf6390c383aae2450fbcdf1
 	// get package
 	Hiscore.Package package = hiscore.packages().get(0);
 	// read package size in bytes
 	System.out.println("Size: " + package.hdr().sz());
 	// read event number
     System.out.println("Event number: " + package.hdr().eventNumber());
+<<<<<<< HEAD
+```
+=======
 ~~~
+>>>>>>> fc324a3781dee95bbbf6390c383aae2450fbcdf1
 

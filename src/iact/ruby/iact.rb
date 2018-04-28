@@ -28,12 +28,12 @@ class Iact < Kaitai::Struct::Struct
     end
 
     def _read
-      @hdr = Header.new(@_io, self, @_root)
+      @header = Header.new(@_io, self, @_root)
       @data = Data.new(@_io, self, @_root)
       @end_of_file = @_io.ensure_fixed_contents([255, 255, 255, 255].pack('C*'))
       self
     end
-    attr_reader :hdr
+    attr_reader :header
     attr_reader :data
     attr_reader :end_of_file
   end
@@ -66,29 +66,7 @@ class Iact < Kaitai::Struct::Struct
     attr_reader :big
     attr_reader :small
   end
-  class Header < Kaitai::Struct::Struct
-    def initialize(_io, _parent = nil, _root = self)
-      super(_io, _parent, _root)
-      _read
-    end
-
-    def _read
-      @magic = @_io.ensure_fixed_contents([216, 11].pack('C*'))
-      @sz = @_io.read_u2le
-      @event_number1 = @_io.read_u4le
-      @stop_position = @_io.read_u4le
-      @time = Time.new(@_io, self, @_root)
-      @maroc_strcut = MarocStrcut.new(@_io, self, @_root)
-      self
-    end
-    attr_reader :magic
-    attr_reader :sz
-    attr_reader :event_number1
-    attr_reader :stop_position
-    attr_reader :time
-    attr_reader :maroc_strcut
-  end
-  class MarocStrcut < Kaitai::Struct::Struct
+  class MarocStruct < Kaitai::Struct::Struct
     def initialize(_io, _parent = nil, _root = self)
       super(_io, _parent, _root)
       _read
@@ -101,6 +79,28 @@ class Iact < Kaitai::Struct::Struct
     end
     attr_reader :maroc_nuber
     attr_reader :skip
+  end
+  class Header < Kaitai::Struct::Struct
+    def initialize(_io, _parent = nil, _root = self)
+      super(_io, _parent, _root)
+      _read
+    end
+
+    def _read
+      @magic = @_io.ensure_fixed_contents([216, 11].pack('C*'))
+      @size = @_io.read_u2le
+      @event_number = @_io.read_u4le
+      @reserved = @_io.read_u4le
+      @time = Time.new(@_io, self, @_root)
+      @maroc_struct = MarocStruct.new(@_io, self, @_root)
+      self
+    end
+    attr_reader :magic
+    attr_reader :size
+    attr_reader :event_number
+    attr_reader :reserved
+    attr_reader :time
+    attr_reader :maroc_struct
   end
   class Time < Kaitai::Struct::Struct
     def initialize(_io, _parent = nil, _root = self)

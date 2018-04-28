@@ -75,14 +75,14 @@ sub new {
 sub _read {
     my ($self) = @_;
 
-    $self->{hdr} = Iact::Header->new($self->{_io}, $self, $self->{_root});
+    $self->{header} = Iact::Header->new($self->{_io}, $self, $self->{_root});
     $self->{data} = Iact::Data->new($self->{_io}, $self, $self->{_root});
     $self->{end_of_file} = $self->{_io}->ensure_fixed_contents(pack('C*', (255, 255, 255, 255)));
 }
 
-sub hdr {
+sub header {
     my ($self) = @_;
-    return $self->{hdr};
+    return $self->{header};
 }
 
 sub data {
@@ -182,75 +182,7 @@ sub small {
 }
 
 ########################################################################
-package Iact::Header;
-
-our @ISA = 'IO::KaitaiStruct::Struct';
-
-sub from_file {
-    my ($class, $filename) = @_;
-    my $fd;
-
-    open($fd, '<', $filename) or return undef;
-    binmode($fd);
-    return new($class, IO::KaitaiStruct::Stream->new($fd));
-}
-
-sub new {
-    my ($class, $_io, $_parent, $_root) = @_;
-    my $self = IO::KaitaiStruct::Struct->new($_io);
-
-    bless $self, $class;
-    $self->{_parent} = $_parent;
-    $self->{_root} = $_root || $self;;
-
-    $self->_read();
-
-    return $self;
-}
-
-sub _read {
-    my ($self) = @_;
-
-    $self->{magic} = $self->{_io}->ensure_fixed_contents(pack('C*', (216, 11)));
-    $self->{sz} = $self->{_io}->read_u2le();
-    $self->{event_number1} = $self->{_io}->read_u4le();
-    $self->{stop_position} = $self->{_io}->read_u4le();
-    $self->{time} = Iact::Time->new($self->{_io}, $self, $self->{_root});
-    $self->{maroc_strcut} = Iact::MarocStrcut->new($self->{_io}, $self, $self->{_root});
-}
-
-sub magic {
-    my ($self) = @_;
-    return $self->{magic};
-}
-
-sub sz {
-    my ($self) = @_;
-    return $self->{sz};
-}
-
-sub event_number1 {
-    my ($self) = @_;
-    return $self->{event_number1};
-}
-
-sub stop_position {
-    my ($self) = @_;
-    return $self->{stop_position};
-}
-
-sub time {
-    my ($self) = @_;
-    return $self->{time};
-}
-
-sub maroc_strcut {
-    my ($self) = @_;
-    return $self->{maroc_strcut};
-}
-
-########################################################################
-package Iact::MarocStrcut;
+package Iact::MarocStruct;
 
 our @ISA = 'IO::KaitaiStruct::Struct';
 
@@ -291,6 +223,74 @@ sub maroc_nuber {
 sub skip {
     my ($self) = @_;
     return $self->{skip};
+}
+
+########################################################################
+package Iact::Header;
+
+our @ISA = 'IO::KaitaiStruct::Struct';
+
+sub from_file {
+    my ($class, $filename) = @_;
+    my $fd;
+
+    open($fd, '<', $filename) or return undef;
+    binmode($fd);
+    return new($class, IO::KaitaiStruct::Stream->new($fd));
+}
+
+sub new {
+    my ($class, $_io, $_parent, $_root) = @_;
+    my $self = IO::KaitaiStruct::Struct->new($_io);
+
+    bless $self, $class;
+    $self->{_parent} = $_parent;
+    $self->{_root} = $_root || $self;;
+
+    $self->_read();
+
+    return $self;
+}
+
+sub _read {
+    my ($self) = @_;
+
+    $self->{magic} = $self->{_io}->ensure_fixed_contents(pack('C*', (216, 11)));
+    $self->{size} = $self->{_io}->read_u2le();
+    $self->{event_number} = $self->{_io}->read_u4le();
+    $self->{reserved} = $self->{_io}->read_u4le();
+    $self->{time} = Iact::Time->new($self->{_io}, $self, $self->{_root});
+    $self->{maroc_struct} = Iact::MarocStruct->new($self->{_io}, $self, $self->{_root});
+}
+
+sub magic {
+    my ($self) = @_;
+    return $self->{magic};
+}
+
+sub size {
+    my ($self) = @_;
+    return $self->{size};
+}
+
+sub event_number {
+    my ($self) = @_;
+    return $self->{event_number};
+}
+
+sub reserved {
+    my ($self) = @_;
+    return $self->{reserved};
+}
+
+sub time {
+    my ($self) = @_;
+    return $self->{time};
+}
+
+sub maroc_struct {
+    my ($self) = @_;
+    return $self->{maroc_struct};
 }
 
 ########################################################################

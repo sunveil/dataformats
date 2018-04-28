@@ -55,16 +55,16 @@ public class Iact extends KaitaiStruct {
             _read();
         }
         private void _read() {
-            this.hdr = new Header(this._io, this, _root);
+            this.header = new Header(this._io, this, _root);
             this.data = new Data(this._io, this, _root);
             this.endOfFile = this._io.ensureFixedContents(new byte[] { -1, -1, -1, -1 });
         }
-        private Header hdr;
+        private Header header;
         private Data data;
         private byte[] endOfFile;
         private Iact _root;
         private Iact _parent;
-        public Header hdr() { return hdr; }
+        public Header header() { return header; }
         public Data data() { return data; }
         public byte[] endOfFile() { return endOfFile; }
         public Iact _root() { return _root; }
@@ -134,6 +134,38 @@ public class Iact extends KaitaiStruct {
         public Iact _root() { return _root; }
         public Iact.Data _parent() { return _parent; }
     }
+    public static class MarocStruct extends KaitaiStruct {
+        public static MarocStruct fromFile(String fileName) throws IOException {
+            return new MarocStruct(new ByteBufferKaitaiStream(fileName));
+        }
+
+        public MarocStruct(KaitaiStream _io) {
+            this(_io, null, null);
+        }
+
+        public MarocStruct(KaitaiStream _io, Iact.Header _parent) {
+            this(_io, _parent, null);
+        }
+
+        public MarocStruct(KaitaiStream _io, Iact.Header _parent, Iact _root) {
+            super(_io);
+            this._parent = _parent;
+            this._root = _root;
+            _read();
+        }
+        private void _read() {
+            this.marocNuber = this._io.readBitsInt(5);
+            this.skip = this._io.readBitsInt(27);
+        }
+        private long marocNuber;
+        private long skip;
+        private Iact _root;
+        private Iact.Header _parent;
+        public long marocNuber() { return marocNuber; }
+        public long skip() { return skip; }
+        public Iact _root() { return _root; }
+        public Iact.Header _parent() { return _parent; }
+    }
     public static class Header extends KaitaiStruct {
         public static Header fromFile(String fileName) throws IOException {
             return new Header(new ByteBufferKaitaiStream(fileName));
@@ -155,60 +187,28 @@ public class Iact extends KaitaiStruct {
         }
         private void _read() {
             this.magic = this._io.ensureFixedContents(new byte[] { -40, 11 });
-            this.sz = this._io.readU2le();
-            this.eventNumber1 = this._io.readU4le();
-            this.stopPosition = this._io.readU4le();
+            this.size = this._io.readU2le();
+            this.eventNumber = this._io.readU4le();
+            this.reserved = this._io.readU4le();
             this.time = new Time(this._io, this, _root);
-            this.marocStrcut = new MarocStrcut(this._io, this, _root);
+            this.marocStruct = new MarocStruct(this._io, this, _root);
         }
         private byte[] magic;
-        private int sz;
-        private long eventNumber1;
-        private long stopPosition;
+        private int size;
+        private long eventNumber;
+        private long reserved;
         private Time time;
-        private MarocStrcut marocStrcut;
+        private MarocStruct marocStruct;
         private Iact _root;
         private Iact.Package _parent;
         public byte[] magic() { return magic; }
-        public int sz() { return sz; }
-        public long eventNumber1() { return eventNumber1; }
-        public long stopPosition() { return stopPosition; }
+        public int size() { return size; }
+        public long eventNumber() { return eventNumber; }
+        public long reserved() { return reserved; }
         public Time time() { return time; }
-        public MarocStrcut marocStrcut() { return marocStrcut; }
+        public MarocStruct marocStruct() { return marocStruct; }
         public Iact _root() { return _root; }
         public Iact.Package _parent() { return _parent; }
-    }
-    public static class MarocStrcut extends KaitaiStruct {
-        public static MarocStrcut fromFile(String fileName) throws IOException {
-            return new MarocStrcut(new ByteBufferKaitaiStream(fileName));
-        }
-
-        public MarocStrcut(KaitaiStream _io) {
-            this(_io, null, null);
-        }
-
-        public MarocStrcut(KaitaiStream _io, Iact.Header _parent) {
-            this(_io, _parent, null);
-        }
-
-        public MarocStrcut(KaitaiStream _io, Iact.Header _parent, Iact _root) {
-            super(_io);
-            this._parent = _parent;
-            this._root = _root;
-            _read();
-        }
-        private void _read() {
-            this.marocNuber = this._io.readBitsInt(5);
-            this.skip = this._io.readBitsInt(27);
-        }
-        private long marocNuber;
-        private long skip;
-        private Iact _root;
-        private Iact.Header _parent;
-        public long marocNuber() { return marocNuber; }
-        public long skip() { return skip; }
-        public Iact _root() { return _root; }
-        public Iact.Header _parent() { return _parent; }
     }
     public static class Time extends KaitaiStruct {
         public static Time fromFile(String fileName) throws IOException {

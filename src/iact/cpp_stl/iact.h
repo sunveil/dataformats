@@ -18,8 +18,8 @@ public:
     class package_t;
     class data_t;
     class chanel_t;
+    class maroc_struct_t;
     class header_t;
-    class maroc_strcut_t;
     class time_t;
 
     iact_t(kaitai::kstream* p__io, kaitai::kstruct* p__parent = 0, iact_t* p__root = 0);
@@ -43,14 +43,14 @@ public:
         ~package_t();
 
     private:
-        header_t* m_hdr;
+        header_t* m_header;
         data_t* m_data;
         std::string m_end_of_file;
         iact_t* m__root;
         iact_t* m__parent;
 
     public:
-        header_t* hdr() const { return m_hdr; }
+        header_t* header() const { return m_header; }
         data_t* data() const { return m_data; }
         std::string end_of_file() const { return m_end_of_file; }
         iact_t* _root() const { return m__root; }
@@ -105,6 +105,31 @@ public:
         iact_t::data_t* _parent() const { return m__parent; }
     };
 
+    class maroc_struct_t : public kaitai::kstruct {
+
+    public:
+
+        maroc_struct_t(kaitai::kstream* p__io, iact_t::header_t* p__parent = 0, iact_t* p__root = 0);
+
+    private:
+        void _read();
+
+    public:
+        ~maroc_struct_t();
+
+    private:
+        uint64_t m_maroc_nuber;
+        uint64_t m_skip;
+        iact_t* m__root;
+        iact_t::header_t* m__parent;
+
+    public:
+        uint64_t maroc_nuber() const { return m_maroc_nuber; }
+        uint64_t skip() const { return m_skip; }
+        iact_t* _root() const { return m__root; }
+        iact_t::header_t* _parent() const { return m__parent; }
+    };
+
     class header_t : public kaitai::kstruct {
 
     public:
@@ -119,48 +144,23 @@ public:
 
     private:
         std::string m_magic;
-        uint16_t m_sz;
-        uint32_t m_event_number1;
-        uint32_t m_stop_position;
+        uint16_t m_size;
+        uint32_t m_event_number;
+        uint32_t m_reserved;
         time_t* m_time;
-        maroc_strcut_t* m_maroc_strcut;
+        maroc_struct_t* m_maroc_struct;
         iact_t* m__root;
         iact_t::package_t* m__parent;
 
     public:
         std::string magic() const { return m_magic; }
-        uint16_t sz() const { return m_sz; }
-        uint32_t event_number1() const { return m_event_number1; }
-        uint32_t stop_position() const { return m_stop_position; }
+        uint16_t size() const { return m_size; }
+        uint32_t event_number() const { return m_event_number; }
+        uint32_t reserved() const { return m_reserved; }
         time_t* time() const { return m_time; }
-        maroc_strcut_t* maroc_strcut() const { return m_maroc_strcut; }
+        maroc_struct_t* maroc_struct() const { return m_maroc_struct; }
         iact_t* _root() const { return m__root; }
         iact_t::package_t* _parent() const { return m__parent; }
-    };
-
-    class maroc_strcut_t : public kaitai::kstruct {
-
-    public:
-
-        maroc_strcut_t(kaitai::kstream* p__io, iact_t::header_t* p__parent = 0, iact_t* p__root = 0);
-
-    private:
-        void _read();
-
-    public:
-        ~maroc_strcut_t();
-
-    private:
-        uint64_t m_maroc_nuber;
-        uint64_t m_skip;
-        iact_t* m__root;
-        iact_t::header_t* m__parent;
-
-    public:
-        uint64_t maroc_nuber() const { return m_maroc_nuber; }
-        uint64_t skip() const { return m_skip; }
-        iact_t* _root() const { return m__root; }
-        iact_t::header_t* _parent() const { return m__parent; }
     };
 
     class time_t : public kaitai::kstruct {

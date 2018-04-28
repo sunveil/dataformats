@@ -35,7 +35,7 @@ var Iact = (function() {
       this._read();
     }
     Package.prototype._read = function() {
-      this.hdr = new Header(this._io, this, this._root);
+      this.header = new Header(this._io, this, this._root);
       this.data = new Data(this._io, this, this._root);
       this.endOfFile = this._io.ensureFixedContents([255, 255, 255, 255]);
     }
@@ -77,6 +77,22 @@ var Iact = (function() {
     return Chanel;
   })();
 
+  var MarocStruct = Iact.MarocStruct = (function() {
+    function MarocStruct(_io, _parent, _root) {
+      this._io = _io;
+      this._parent = _parent;
+      this._root = _root || this;
+
+      this._read();
+    }
+    MarocStruct.prototype._read = function() {
+      this.marocNuber = this._io.readBitsInt(5);
+      this.skip = this._io.readBitsInt(27);
+    }
+
+    return MarocStruct;
+  })();
+
   var Header = Iact.Header = (function() {
     function Header(_io, _parent, _root) {
       this._io = _io;
@@ -87,30 +103,14 @@ var Iact = (function() {
     }
     Header.prototype._read = function() {
       this.magic = this._io.ensureFixedContents([216, 11]);
-      this.sz = this._io.readU2le();
-      this.eventNumber1 = this._io.readU4le();
-      this.stopPosition = this._io.readU4le();
+      this.size = this._io.readU2le();
+      this.eventNumber = this._io.readU4le();
+      this.reserved = this._io.readU4le();
       this.time = new Time(this._io, this, this._root);
-      this.marocStrcut = new MarocStrcut(this._io, this, this._root);
+      this.marocStruct = new MarocStruct(this._io, this, this._root);
     }
 
     return Header;
-  })();
-
-  var MarocStrcut = Iact.MarocStrcut = (function() {
-    function MarocStrcut(_io, _parent, _root) {
-      this._io = _io;
-      this._parent = _parent;
-      this._root = _root || this;
-
-      this._read();
-    }
-    MarocStrcut.prototype._read = function() {
-      this.marocNuber = this._io.readBitsInt(5);
-      this.skip = this._io.readBitsInt(27);
-    }
-
-    return MarocStrcut;
   })();
 
   var Time = Iact.Time = (function() {

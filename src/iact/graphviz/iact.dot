@@ -16,7 +16,7 @@ digraph {
 
 			package__seq [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
 				<TR><TD BGCOLOR="#E0FFE0">pos</TD><TD BGCOLOR="#E0FFE0">size</TD><TD BGCOLOR="#E0FFE0">type</TD><TD BGCOLOR="#E0FFE0">id</TD></TR>
-				<TR><TD PORT="hdr_pos">0</TD><TD PORT="hdr_size">24</TD><TD>Header</TD><TD PORT="hdr_type">hdr</TD></TR>
+				<TR><TD PORT="header_pos">0</TD><TD PORT="header_size">24</TD><TD>Header</TD><TD PORT="header_type">header</TD></TR>
 				<TR><TD PORT="data_pos">24</TD><TD PORT="data_size">128</TD><TD>Data</TD><TD PORT="data_type">data</TD></TR>
 				<TR><TD PORT="end_of_file_pos">152</TD><TD PORT="end_of_file_size">4</TD><TD>FF FF FF FF</TD><TD PORT="end_of_file_type">end_of_file</TD></TR>
 			</TABLE>>];
@@ -41,6 +41,16 @@ digraph {
 				<TR><TD PORT="small_pos">2</TD><TD PORT="small_size">2</TD><TD>u2le</TD><TD PORT="small_type">small</TD></TR>
 			</TABLE>>];
 		}
+		subgraph cluster__maroc_struct {
+			label="Iact::MarocStruct";
+			graph[style=dotted];
+
+			maroc_struct__seq [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD BGCOLOR="#E0FFE0">pos</TD><TD BGCOLOR="#E0FFE0">size</TD><TD BGCOLOR="#E0FFE0">type</TD><TD BGCOLOR="#E0FFE0">id</TD></TR>
+				<TR><TD PORT="maroc_nuber_pos">0</TD><TD PORT="maroc_nuber_size">5b</TD><TD>b5</TD><TD PORT="maroc_nuber_type">maroc_nuber</TD></TR>
+				<TR><TD PORT="skip_pos">0:5</TD><TD PORT="skip_size">27b</TD><TD>b27</TD><TD PORT="skip_type">skip</TD></TR>
+			</TABLE>>];
+		}
 		subgraph cluster__header {
 			label="Iact::Header";
 			graph[style=dotted];
@@ -48,21 +58,11 @@ digraph {
 			header__seq [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
 				<TR><TD BGCOLOR="#E0FFE0">pos</TD><TD BGCOLOR="#E0FFE0">size</TD><TD BGCOLOR="#E0FFE0">type</TD><TD BGCOLOR="#E0FFE0">id</TD></TR>
 				<TR><TD PORT="magic_pos">0</TD><TD PORT="magic_size">2</TD><TD>D8 0B</TD><TD PORT="magic_type">magic</TD></TR>
-				<TR><TD PORT="sz_pos">2</TD><TD PORT="sz_size">2</TD><TD>u2le</TD><TD PORT="sz_type">sz</TD></TR>
-				<TR><TD PORT="event_number1_pos">4</TD><TD PORT="event_number1_size">4</TD><TD>u4le</TD><TD PORT="event_number1_type">event_number1</TD></TR>
-				<TR><TD PORT="stop_position_pos">8</TD><TD PORT="stop_position_size">4</TD><TD>u4le</TD><TD PORT="stop_position_type">stop_position</TD></TR>
+				<TR><TD PORT="size_pos">2</TD><TD PORT="size_size">2</TD><TD>u2le</TD><TD PORT="size_type">size</TD></TR>
+				<TR><TD PORT="event_number_pos">4</TD><TD PORT="event_number_size">4</TD><TD>u4le</TD><TD PORT="event_number_type">event_number</TD></TR>
+				<TR><TD PORT="reserved_pos">8</TD><TD PORT="reserved_size">4</TD><TD>u4le</TD><TD PORT="reserved_type">reserved</TD></TR>
 				<TR><TD PORT="time_pos">12</TD><TD PORT="time_size">8</TD><TD>Time</TD><TD PORT="time_type">time</TD></TR>
-				<TR><TD PORT="maroc_strcut_pos">20</TD><TD PORT="maroc_strcut_size">4</TD><TD>MarocStrcut</TD><TD PORT="maroc_strcut_type">maroc_strcut</TD></TR>
-			</TABLE>>];
-		}
-		subgraph cluster__maroc_strcut {
-			label="Iact::MarocStrcut";
-			graph[style=dotted];
-
-			maroc_strcut__seq [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
-				<TR><TD BGCOLOR="#E0FFE0">pos</TD><TD BGCOLOR="#E0FFE0">size</TD><TD BGCOLOR="#E0FFE0">type</TD><TD BGCOLOR="#E0FFE0">id</TD></TR>
-				<TR><TD PORT="maroc_nuber_pos">0</TD><TD PORT="maroc_nuber_size">5b</TD><TD>b5</TD><TD PORT="maroc_nuber_type">maroc_nuber</TD></TR>
-				<TR><TD PORT="skip_pos">0:5</TD><TD PORT="skip_size">27b</TD><TD>b27</TD><TD PORT="skip_type">skip</TD></TR>
+				<TR><TD PORT="maroc_struct_pos">20</TD><TD PORT="maroc_struct_size">4</TD><TD>MarocStruct</TD><TD PORT="maroc_struct_type">maroc_struct</TD></TR>
 			</TABLE>>];
 		}
 		subgraph cluster__time {
@@ -103,11 +103,11 @@ digraph {
 		}
 	}
 	iact__seq:packages_type -> package__seq [style=bold];
-	package__seq:hdr_type -> header__seq [style=bold];
+	package__seq:header_type -> header__seq [style=bold];
 	package__seq:data_type -> data__seq [style=bold];
 	data__seq:chanels_type -> chanel__seq [style=bold];
 	header__seq:time_type -> time__seq [style=bold];
-	header__seq:maroc_strcut_type -> maroc_strcut__seq [style=bold];
+	header__seq:maroc_struct_type -> maroc_struct__seq [style=bold];
 	time__seq:dat1_type -> time__inst__mls [color="#404040"];
 	time__seq:dat0_type -> time__inst__dns [color="#404040"];
 	time__seq:dat1_type -> time__inst__s [color="#404040"];

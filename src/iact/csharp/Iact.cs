@@ -43,16 +43,16 @@ namespace Kaitai
             }
             private void _read()
             {
-                _hdr = new Header(m_io, this, m_root);
+                _header = new Header(m_io, this, m_root);
                 _data = new Data(m_io, this, m_root);
                 _endOfFile = m_io.EnsureFixedContents(new byte[] { 255, 255, 255, 255 });
             }
-            private Header _hdr;
+            private Header _header;
             private Data _data;
             private byte[] _endOfFile;
             private Iact m_root;
             private Iact m_parent;
-            public Header Hdr { get { return _hdr; } }
+            public Header Header { get { return _header; } }
             public Data Data { get { return _data; } }
             public byte[] EndOfFile { get { return _endOfFile; } }
             public Iact M_Root { get { return m_root; } }
@@ -113,53 +113,14 @@ namespace Kaitai
             public Iact M_Root { get { return m_root; } }
             public Iact.Data M_Parent { get { return m_parent; } }
         }
-        public partial class Header : KaitaiStruct
+        public partial class MarocStruct : KaitaiStruct
         {
-            public static Header FromFile(string fileName)
+            public static MarocStruct FromFile(string fileName)
             {
-                return new Header(new KaitaiStream(fileName));
+                return new MarocStruct(new KaitaiStream(fileName));
             }
 
-            public Header(KaitaiStream p__io, Iact.Package p__parent = null, Iact p__root = null) : base(p__io)
-            {
-                m_parent = p__parent;
-                m_root = p__root;
-                _read();
-            }
-            private void _read()
-            {
-                _magic = m_io.EnsureFixedContents(new byte[] { 216, 11 });
-                _sz = m_io.ReadU2le();
-                _eventNumber1 = m_io.ReadU4le();
-                _stopPosition = m_io.ReadU4le();
-                _time = new Time(m_io, this, m_root);
-                _marocStrcut = new MarocStrcut(m_io, this, m_root);
-            }
-            private byte[] _magic;
-            private ushort _sz;
-            private uint _eventNumber1;
-            private uint _stopPosition;
-            private Time _time;
-            private MarocStrcut _marocStrcut;
-            private Iact m_root;
-            private Iact.Package m_parent;
-            public byte[] Magic { get { return _magic; } }
-            public ushort Sz { get { return _sz; } }
-            public uint EventNumber1 { get { return _eventNumber1; } }
-            public uint StopPosition { get { return _stopPosition; } }
-            public Time Time { get { return _time; } }
-            public MarocStrcut MarocStrcut { get { return _marocStrcut; } }
-            public Iact M_Root { get { return m_root; } }
-            public Iact.Package M_Parent { get { return m_parent; } }
-        }
-        public partial class MarocStrcut : KaitaiStruct
-        {
-            public static MarocStrcut FromFile(string fileName)
-            {
-                return new MarocStrcut(new KaitaiStream(fileName));
-            }
-
-            public MarocStrcut(KaitaiStream p__io, Iact.Header p__parent = null, Iact p__root = null) : base(p__io)
+            public MarocStruct(KaitaiStream p__io, Iact.Header p__parent = null, Iact p__root = null) : base(p__io)
             {
                 m_parent = p__parent;
                 m_root = p__root;
@@ -178,6 +139,45 @@ namespace Kaitai
             public ulong Skip { get { return _skip; } }
             public Iact M_Root { get { return m_root; } }
             public Iact.Header M_Parent { get { return m_parent; } }
+        }
+        public partial class Header : KaitaiStruct
+        {
+            public static Header FromFile(string fileName)
+            {
+                return new Header(new KaitaiStream(fileName));
+            }
+
+            public Header(KaitaiStream p__io, Iact.Package p__parent = null, Iact p__root = null) : base(p__io)
+            {
+                m_parent = p__parent;
+                m_root = p__root;
+                _read();
+            }
+            private void _read()
+            {
+                _magic = m_io.EnsureFixedContents(new byte[] { 216, 11 });
+                _size = m_io.ReadU2le();
+                _eventNumber = m_io.ReadU4le();
+                _reserved = m_io.ReadU4le();
+                _time = new Time(m_io, this, m_root);
+                _marocStruct = new MarocStruct(m_io, this, m_root);
+            }
+            private byte[] _magic;
+            private ushort _size;
+            private uint _eventNumber;
+            private uint _reserved;
+            private Time _time;
+            private MarocStruct _marocStruct;
+            private Iact m_root;
+            private Iact.Package m_parent;
+            public byte[] Magic { get { return _magic; } }
+            public ushort Size { get { return _size; } }
+            public uint EventNumber { get { return _eventNumber; } }
+            public uint Reserved { get { return _reserved; } }
+            public Time Time { get { return _time; } }
+            public MarocStruct MarocStruct { get { return _marocStruct; } }
+            public Iact M_Root { get { return m_root; } }
+            public Iact.Package M_Parent { get { return m_parent; } }
         }
         public partial class Time : KaitaiStruct
         {

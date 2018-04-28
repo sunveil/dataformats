@@ -30,7 +30,7 @@ class Iact(KaitaiStruct):
             self._read()
 
         def _read(self):
-            self.hdr = self._root.Header(self._io, self, self._root)
+            self.header = self._root.Header(self._io, self, self._root)
             self.data = self._root.Data(self._io, self, self._root)
             self.end_of_file = self._io.ensure_fixed_contents(b"\xFF\xFF\xFF\xFF")
 
@@ -61,23 +61,7 @@ class Iact(KaitaiStruct):
             self.small = self._io.read_u2le()
 
 
-    class Header(KaitaiStruct):
-        def __init__(self, _io, _parent=None, _root=None):
-            self._io = _io
-            self._parent = _parent
-            self._root = _root if _root else self
-            self._read()
-
-        def _read(self):
-            self.magic = self._io.ensure_fixed_contents(b"\xD8\x0B")
-            self.sz = self._io.read_u2le()
-            self.event_number1 = self._io.read_u4le()
-            self.stop_position = self._io.read_u4le()
-            self.time = self._root.Time(self._io, self, self._root)
-            self.maroc_strcut = self._root.MarocStrcut(self._io, self, self._root)
-
-
-    class MarocStrcut(KaitaiStruct):
+    class MarocStruct(KaitaiStruct):
         def __init__(self, _io, _parent=None, _root=None):
             self._io = _io
             self._parent = _parent
@@ -87,6 +71,22 @@ class Iact(KaitaiStruct):
         def _read(self):
             self.maroc_nuber = self._io.read_bits_int(5)
             self.skip = self._io.read_bits_int(27)
+
+
+    class Header(KaitaiStruct):
+        def __init__(self, _io, _parent=None, _root=None):
+            self._io = _io
+            self._parent = _parent
+            self._root = _root if _root else self
+            self._read()
+
+        def _read(self):
+            self.magic = self._io.ensure_fixed_contents(b"\xD8\x0B")
+            self.size = self._io.read_u2le()
+            self.event_number = self._io.read_u4le()
+            self.reserved = self._io.read_u4le()
+            self.time = self._root.Time(self._io, self, self._root)
+            self.maroc_struct = self._root.MarocStruct(self._io, self, self._root)
 
 
     class Time(KaitaiStruct):

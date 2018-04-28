@@ -1,7 +1,6 @@
 meta:
   id: iact
   title: IACT data
-  license: Unlicensed
 seq:
   - id: packages
     type: package
@@ -9,7 +8,7 @@ seq:
 types:
   package:
     seq:
-      - id: hdr
+      - id: header
         type: header
       - id: data
         type: data
@@ -20,16 +19,16 @@ types:
       - id: magic
         contents: [0xD8, 0x0B]
         size: u2le
-      - id: sz
+      - id: size
         type: u2le	 
-      - id: event_number1
+      - id: event_number
         type: u4le
-      - id: stop_position
+      - id: reserved
         type: u4le
       - id: time
         type: time
-      - id: maroc_strcut
-        type: maroc_strcut
+      - id: maroc_struct
+        type: maroc_struct
   data:
     seq:
       - id: chanels
@@ -42,7 +41,7 @@ types:
         type: u2le
       - id: small
         type: u2le
-  maroc_strcut:
+  maroc_struct:
     seq:
       - id: maroc_nuber
         type: b5
