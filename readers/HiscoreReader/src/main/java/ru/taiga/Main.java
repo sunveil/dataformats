@@ -1,6 +1,7 @@
+package ru.taiga;
+
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
 
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
@@ -11,7 +12,7 @@ public class Main {
     private final static int DATA_COUNT_TO_VIEW = 10;
 
     // CLI params
-    @Option(name = "-i", aliases = {"--input"}, required = true, metaVar = "PATH", usage = "specify a file or directory of SDS document(s)")
+    @Option(name = "-i", aliases = {"--input"}, metaVar = "PATH", usage = "specify a file or directory of SDS document(s)")
     private static String inArg;
     private static File inputFile;
 
