@@ -1,13 +1,47 @@
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+
+import org.kohsuke.args4j.CmdLineException;
+import org.kohsuke.args4j.CmdLineParser;
+import org.kohsuke.args4j.Option;
 
 public class Main {
 
-    private final static String FILE_NAME = "C:\\Документы\\Проекты\\TAIGA\\Data Formats\\Samples\\hiscore\\10038105.010";
     private final static int DATA_COUNT_TO_VIEW = 10;
 
-    public static void main(String[] args) throws IOException {
+    // CLI params
+    @Option(name = "-i", aliases = {"--input"}, required = true, metaVar = "PATH", usage = "specify a file or directory of SDS document(s)")
+    private static String inArg;
+    private static File inputFile;
 
-        Hiscore hiscore = Hiscore.fromFile(FILE_NAME);
+    @Option(name="-?", aliases={"--help"}, usage="show this message")
+    private static boolean help = false;
+
+    public static void main(String[] args) throws IOException, EmptyArgumentException {
+
+        CmdLineParser parser = new CmdLineParser(new Main());
+
+        try {
+            parser.parseArgument(args);
+
+            if (help) {
+                parser.printUsage(System.err);
+                System.exit(0);
+            }
+        } catch (CmdLineException e) {
+            e.printStackTrace();
+        }
+
+        throwIfEmpty(inArg);
+
+        inputFile = new File(inArg);
+
+        if (!inputFile.isFile()) {
+            throw new EmptyArgumentException("A required option was not specified");
+        }
+
+        Hiscore hiscore = Hiscore.fromFile(inputFile.toPath().toString());
 
         System.out.println("Magic: " + hiscore.hdr().magic());
         System.out.println("Size: " + hiscore.hdr().sz());
@@ -36,6 +70,16 @@ public class Main {
             System.out.println();
         }
 
+    }
+
+    private static void throwIfEmpty(String arg) throws EmptyArgumentException {
+        if (isEmptyArg(arg)) {
+            throw new EmptyArgumentException("A required option was not specified");
+        }
+    }
+
+    private static boolean isEmptyArg(String arg) {
+        return arg == null || arg.isEmpty();
     }
 
 }
