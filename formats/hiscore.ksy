@@ -15,7 +15,7 @@ types:
         type: data_block
         repeat: expr
         repeat-expr: 9
-      - id: end_of_file
+      - id: end_of_package
         contents: [0xFF, 0xFF, 0xFF, 0xFF]
   header: 
     seq:
@@ -25,7 +25,7 @@ types:
         type: u2le	 
       - id: event_number
         type: u4le
-      - id: stop_position
+      - id: reserved
         type: u4le
       - id: time
         type: time

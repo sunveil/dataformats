@@ -12,7 +12,7 @@ types:
         type: header
       - id: data
         type: data
-      - id: end_of_file
+      - id: end_of_package
         contents: [0xFF, 0xFF, 0xFF, 0xFF]
   header: 
     seq:
