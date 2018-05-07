@@ -1,34 +1,39 @@
 <?php
 // This is a generated file! Please edit source .ksy file and use kaitai-struct-compiler to rebuild
 
-class T133Grande extends \Kaitai\Struct\Struct {
-    public function __construct(\Kaitai\Struct\Stream $_io, \Kaitai\Struct\Struct $_parent = null, \T133Grande $_root = null) {
+class Trex extends \Kaitai\Struct\Struct {
+    public function __construct(\Kaitai\Struct\Stream $_io, \Kaitai\Struct\Struct $_parent = null, \Trex $_root = null) {
         parent::__construct($_io, $_parent, $_root);
         $this->_read();
     }
 
     private function _read() {
-        $this->_m_link = new \T133Grande\Link($this->_io, $this, $this->_root);
+        $this->_m_links = [];
+        $i = 0;
+        while (!$this->_io->isEof()) {
+            $this->_m_links[] = new \Trex\Link($this->_io, $this, $this->_root);
+            $i++;
+        }
     }
-    protected $_m_link;
-    public function link() { return $this->_m_link; }
+    protected $_m_links;
+    public function links() { return $this->_m_links; }
 }
 
-namespace \T133Grande;
+namespace \Trex;
 
 class Link extends \Kaitai\Struct\Struct {
-    public function __construct(\Kaitai\Struct\Stream $_io, \T133Grande $_parent = null, \T133Grande $_root = null) {
+    public function __construct(\Kaitai\Struct\Stream $_io, \Trex $_parent = null, \Trex $_root = null) {
         parent::__construct($_io, $_parent, $_root);
         $this->_read();
     }
 
     private function _read() {
         $this->_m_packages = [];
-        $n = 32;
+        $n = 4;
         for ($i = 0; $i < $n; $i++) {
-            $this->_m_packages[] = new \T133Grande\Package($this->_io, $this, $this->_root);
+            $this->_m_packages[] = new \Trex\Package($this->_io, $this, $this->_root);
         }
-        $this->_m_additionalInfo = new \T133Grande\AdditionalInfo($this->_io, $this, $this->_root);
+        $this->_m_additionalInfo = new \Trex\AdditionalInfo($this->_io, $this, $this->_root);
     }
     protected $_m_packages;
     protected $_m_additionalInfo;
@@ -36,10 +41,10 @@ class Link extends \Kaitai\Struct\Struct {
     public function additionalInfo() { return $this->_m_additionalInfo; }
 }
 
-namespace \T133Grande;
+namespace \Trex;
 
 class Package extends \Kaitai\Struct\Struct {
-    public function __construct(\Kaitai\Struct\Stream $_io, \T133Grande\Link $_parent = null, \T133Grande $_root = null) {
+    public function __construct(\Kaitai\Struct\Stream $_io, \Trex\Link $_parent = null, \Trex $_root = null) {
         parent::__construct($_io, $_parent, $_root);
         $this->_read();
     }
@@ -66,10 +71,10 @@ class Package extends \Kaitai\Struct\Struct {
     public function eventNumber() { return $this->_m_eventNumber; }
 }
 
-namespace \T133Grande;
+namespace \Trex;
 
 class Header extends \Kaitai\Struct\Struct {
-    public function __construct(\Kaitai\Struct\Stream $_io, \T133Grande\AdditionalInfo $_parent = null, \T133Grande $_root = null) {
+    public function __construct(\Kaitai\Struct\Stream $_io, \Trex\AdditionalInfo $_parent = null, \Trex $_root = null) {
         parent::__construct($_io, $_parent, $_root);
         $this->_read();
     }
@@ -99,16 +104,16 @@ class Header extends \Kaitai\Struct\Struct {
     public function vmeAddres() { return $this->_m_vmeAddres; }
 }
 
-namespace \T133Grande;
+namespace \Trex;
 
 class AdditionalInfo extends \Kaitai\Struct\Struct {
-    public function __construct(\Kaitai\Struct\Stream $_io, \T133Grande\Link $_parent = null, \T133Grande $_root = null) {
+    public function __construct(\Kaitai\Struct\Stream $_io, \Trex\Link $_parent = null, \Trex $_root = null) {
         parent::__construct($_io, $_parent, $_root);
         $this->_read();
     }
 
     private function _read() {
-        $this->_m_header = new \T133Grande\Header($this->_io, $this, $this->_root);
+        $this->_m_header = new \Trex\Header($this->_io, $this, $this->_root);
         $this->_m_data = [];
         $n = intval(($this->header()->packageSize() - 9) / 2);
         for ($i = 0; $i < $n; $i++) {

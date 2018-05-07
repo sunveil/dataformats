@@ -6,27 +6,34 @@ import io.kaitai.struct.KaitaiStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class T133Grande extends KaitaiStruct {
-    public static T133Grande fromFile(String fileName) throws IOException {
-        return new T133Grande(new ByteBufferKaitaiStream(fileName));
+public class Trex extends KaitaiStruct {
+    public static Trex fromFile(String fileName) throws IOException {
+        return new Trex(new ByteBufferKaitaiStream(fileName));
     }
 
-    public T133Grande(KaitaiStream _io) {
+    public Trex(KaitaiStream _io) {
         this(_io, null, null);
     }
 
-    public T133Grande(KaitaiStream _io, KaitaiStruct _parent) {
+    public Trex(KaitaiStream _io, KaitaiStruct _parent) {
         this(_io, _parent, null);
     }
 
-    public T133Grande(KaitaiStream _io, KaitaiStruct _parent, T133Grande _root) {
+    public Trex(KaitaiStream _io, KaitaiStruct _parent, Trex _root) {
         super(_io);
         this._parent = _parent;
         this._root = _root == null ? this : _root;
         _read();
     }
     private void _read() {
-        this.link = new Link(this._io, this, _root);
+        this.links = new ArrayList<Link>();
+        {
+            int i = 0;
+            while (!this._io.isEof()) {
+                this.links.add(new Link(this._io, this, _root));
+                i++;
+            }
+        }
     }
     public static class Link extends KaitaiStruct {
         public static Link fromFile(String fileName) throws IOException {
@@ -37,31 +44,31 @@ public class T133Grande extends KaitaiStruct {
             this(_io, null, null);
         }
 
-        public Link(KaitaiStream _io, T133Grande _parent) {
+        public Link(KaitaiStream _io, Trex _parent) {
             this(_io, _parent, null);
         }
 
-        public Link(KaitaiStream _io, T133Grande _parent, T133Grande _root) {
+        public Link(KaitaiStream _io, Trex _parent, Trex _root) {
             super(_io);
             this._parent = _parent;
             this._root = _root;
             _read();
         }
         private void _read() {
-            packages = new ArrayList<Package>((int) (32));
-            for (int i = 0; i < 32; i++) {
+            packages = new ArrayList<Package>((int) (4));
+            for (int i = 0; i < 4; i++) {
                 this.packages.add(new Package(this._io, this, _root));
             }
             this.additionalInfo = new AdditionalInfo(this._io, this, _root);
         }
         private ArrayList<Package> packages;
         private AdditionalInfo additionalInfo;
-        private T133Grande _root;
-        private T133Grande _parent;
+        private Trex _root;
+        private Trex _parent;
         public ArrayList<Package> packages() { return packages; }
         public AdditionalInfo additionalInfo() { return additionalInfo; }
-        public T133Grande _root() { return _root; }
-        public T133Grande _parent() { return _parent; }
+        public Trex _root() { return _root; }
+        public Trex _parent() { return _parent; }
     }
     public static class Package extends KaitaiStruct {
         public static Package fromFile(String fileName) throws IOException {
@@ -72,11 +79,11 @@ public class T133Grande extends KaitaiStruct {
             this(_io, null, null);
         }
 
-        public Package(KaitaiStream _io, T133Grande.Link _parent) {
+        public Package(KaitaiStream _io, Trex.Link _parent) {
             this(_io, _parent, null);
         }
 
-        public Package(KaitaiStream _io, T133Grande.Link _parent, T133Grande _root) {
+        public Package(KaitaiStream _io, Trex.Link _parent, Trex _root) {
             super(_io);
             this._parent = _parent;
             this._root = _root;
@@ -96,16 +103,16 @@ public class T133Grande extends KaitaiStruct {
         private int ms;
         private int opticalLineLength;
         private long eventNumber;
-        private T133Grande _root;
-        private T133Grande.Link _parent;
+        private Trex _root;
+        private Trex.Link _parent;
         public int h() { return h; }
         public int m() { return m; }
         public int s() { return s; }
         public int ms() { return ms; }
         public int opticalLineLength() { return opticalLineLength; }
         public long eventNumber() { return eventNumber; }
-        public T133Grande _root() { return _root; }
-        public T133Grande.Link _parent() { return _parent; }
+        public Trex _root() { return _root; }
+        public Trex.Link _parent() { return _parent; }
     }
     public static class Header extends KaitaiStruct {
         public static Header fromFile(String fileName) throws IOException {
@@ -116,11 +123,11 @@ public class T133Grande extends KaitaiStruct {
             this(_io, null, null);
         }
 
-        public Header(KaitaiStream _io, T133Grande.AdditionalInfo _parent) {
+        public Header(KaitaiStream _io, Trex.AdditionalInfo _parent) {
             this(_io, _parent, null);
         }
 
-        public Header(KaitaiStream _io, T133Grande.AdditionalInfo _parent, T133Grande _root) {
+        public Header(KaitaiStream _io, Trex.AdditionalInfo _parent, Trex _root) {
             super(_io);
             this._parent = _parent;
             this._root = _root;
@@ -142,8 +149,8 @@ public class T133Grande extends KaitaiStruct {
         private int requestAddress;
         private long eventNumber;
         private long vmeAddres;
-        private T133Grande _root;
-        private T133Grande.AdditionalInfo _parent;
+        private Trex _root;
+        private Trex.AdditionalInfo _parent;
         public byte[] magic() { return magic; }
         public byte[] transferAttribute() { return transferAttribute; }
         public int status() { return status; }
@@ -151,8 +158,8 @@ public class T133Grande extends KaitaiStruct {
         public int requestAddress() { return requestAddress; }
         public long eventNumber() { return eventNumber; }
         public long vmeAddres() { return vmeAddres; }
-        public T133Grande _root() { return _root; }
-        public T133Grande.AdditionalInfo _parent() { return _parent; }
+        public Trex _root() { return _root; }
+        public Trex.AdditionalInfo _parent() { return _parent; }
     }
     public static class AdditionalInfo extends KaitaiStruct {
         public static AdditionalInfo fromFile(String fileName) throws IOException {
@@ -163,11 +170,11 @@ public class T133Grande extends KaitaiStruct {
             this(_io, null, null);
         }
 
-        public AdditionalInfo(KaitaiStream _io, T133Grande.Link _parent) {
+        public AdditionalInfo(KaitaiStream _io, Trex.Link _parent) {
             this(_io, _parent, null);
         }
 
-        public AdditionalInfo(KaitaiStream _io, T133Grande.Link _parent, T133Grande _root) {
+        public AdditionalInfo(KaitaiStream _io, Trex.Link _parent, Trex _root) {
             super(_io);
             this._parent = _parent;
             this._root = _root;
@@ -196,8 +203,8 @@ public class T133Grande extends KaitaiStruct {
         private int ms;
         private int opticalLineLength;
         private long eventNumber;
-        private T133Grande _root;
-        private T133Grande.Link _parent;
+        private Trex _root;
+        private Trex.Link _parent;
         public Header header() { return header; }
         public ArrayList<Integer> data() { return data; }
         public int clusterNumber() { return clusterNumber; }
@@ -207,13 +214,13 @@ public class T133Grande extends KaitaiStruct {
         public int ms() { return ms; }
         public int opticalLineLength() { return opticalLineLength; }
         public long eventNumber() { return eventNumber; }
-        public T133Grande _root() { return _root; }
-        public T133Grande.Link _parent() { return _parent; }
+        public Trex _root() { return _root; }
+        public Trex.Link _parent() { return _parent; }
     }
-    private Link link;
-    private T133Grande _root;
+    private ArrayList<Link> links;
+    private Trex _root;
     private KaitaiStruct _parent;
-    public Link link() { return link; }
-    public T133Grande _root() { return _root; }
+    public ArrayList<Link> links() { return links; }
+    public Trex _root() { return _root; }
     public KaitaiStruct _parent() { return _parent; }
 }

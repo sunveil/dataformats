@@ -5,7 +5,7 @@ use warnings;
 use IO::KaitaiStruct 0.007_000;
 
 ########################################################################
-package T133Grande;
+package Trex;
 
 our @ISA = 'IO::KaitaiStruct::Struct';
 
@@ -34,16 +34,19 @@ sub new {
 sub _read {
     my ($self) = @_;
 
-    $self->{link} = T133Grande::Link->new($self->{_io}, $self, $self->{_root});
+    $self->{links} = ();
+    while (!$self->{_io}->is_eof()) {
+        push @{$self->{links}}, Trex::Link->new($self->{_io}, $self, $self->{_root});
+    }
 }
 
-sub link {
+sub links {
     my ($self) = @_;
-    return $self->{link};
+    return $self->{links};
 }
 
 ########################################################################
-package T133Grande::Link;
+package Trex::Link;
 
 our @ISA = 'IO::KaitaiStruct::Struct';
 
@@ -73,11 +76,11 @@ sub _read {
     my ($self) = @_;
 
     $self->{packages} = ();
-    my $n_packages = 32;
+    my $n_packages = 4;
     for (my $i = 0; $i < $n_packages; $i++) {
-        $self->{packages}[$i] = T133Grande::Package->new($self->{_io}, $self, $self->{_root});
+        $self->{packages}[$i] = Trex::Package->new($self->{_io}, $self, $self->{_root});
     }
-    $self->{additional_info} = T133Grande::AdditionalInfo->new($self->{_io}, $self, $self->{_root});
+    $self->{additional_info} = Trex::AdditionalInfo->new($self->{_io}, $self, $self->{_root});
 }
 
 sub packages {
@@ -91,7 +94,7 @@ sub additional_info {
 }
 
 ########################################################################
-package T133Grande::Package;
+package Trex::Package;
 
 our @ISA = 'IO::KaitaiStruct::Struct';
 
@@ -159,7 +162,7 @@ sub event_number {
 }
 
 ########################################################################
-package T133Grande::Header;
+package Trex::Header;
 
 our @ISA = 'IO::KaitaiStruct::Struct';
 
@@ -233,7 +236,7 @@ sub vme_addres {
 }
 
 ########################################################################
-package T133Grande::AdditionalInfo;
+package Trex::AdditionalInfo;
 
 our @ISA = 'IO::KaitaiStruct::Struct';
 
@@ -262,7 +265,7 @@ sub new {
 sub _read {
     my ($self) = @_;
 
-    $self->{header} = T133Grande::Header->new($self->{_io}, $self, $self->{_root});
+    $self->{header} = Trex::Header->new($self->{_io}, $self, $self->{_root});
     $self->{data} = ();
     my $n_data = int(($self->header()->package_size() - 9) / 2);
     for (my $i = 0; $i < $n_data; $i++) {

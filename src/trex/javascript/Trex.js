@@ -6,22 +6,27 @@
   } else if (typeof module === 'object' && module.exports) {
     module.exports = factory(require('kaitai-struct/KaitaiStream'));
   } else {
-    root.T133Grande = factory(root.KaitaiStream);
+    root.Trex = factory(root.KaitaiStream);
   }
 }(this, function (KaitaiStream) {
-var T133Grande = (function() {
-  function T133Grande(_io, _parent, _root) {
+var Trex = (function() {
+  function Trex(_io, _parent, _root) {
     this._io = _io;
     this._parent = _parent;
     this._root = _root || this;
 
     this._read();
   }
-  T133Grande.prototype._read = function() {
-    this.link = new Link(this._io, this, this._root);
+  Trex.prototype._read = function() {
+    this.links = [];
+    var i = 0;
+    while (!this._io.isEof()) {
+      this.links.push(new Link(this._io, this, this._root));
+      i++;
+    }
   }
 
-  var Link = T133Grande.Link = (function() {
+  var Link = Trex.Link = (function() {
     function Link(_io, _parent, _root) {
       this._io = _io;
       this._parent = _parent;
@@ -30,8 +35,8 @@ var T133Grande = (function() {
       this._read();
     }
     Link.prototype._read = function() {
-      this.packages = new Array(32);
-      for (var i = 0; i < 32; i++) {
+      this.packages = new Array(4);
+      for (var i = 0; i < 4; i++) {
         this.packages[i] = new Package(this._io, this, this._root);
       }
       this.additionalInfo = new AdditionalInfo(this._io, this, this._root);
@@ -40,7 +45,7 @@ var T133Grande = (function() {
     return Link;
   })();
 
-  var Package = T133Grande.Package = (function() {
+  var Package = Trex.Package = (function() {
     function Package(_io, _parent, _root) {
       this._io = _io;
       this._parent = _parent;
@@ -60,7 +65,7 @@ var T133Grande = (function() {
     return Package;
   })();
 
-  var Header = T133Grande.Header = (function() {
+  var Header = Trex.Header = (function() {
     function Header(_io, _parent, _root) {
       this._io = _io;
       this._parent = _parent;
@@ -81,7 +86,7 @@ var T133Grande = (function() {
     return Header;
   })();
 
-  var AdditionalInfo = T133Grande.AdditionalInfo = (function() {
+  var AdditionalInfo = Trex.AdditionalInfo = (function() {
     function AdditionalInfo(_io, _parent, _root) {
       this._io = _io;
       this._parent = _parent;
@@ -107,7 +112,7 @@ var T133Grande = (function() {
     return AdditionalInfo;
   })();
 
-  return T133Grande;
+  return Trex;
 })();
-return T133Grande;
+return Trex;
 }));

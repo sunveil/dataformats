@@ -4,14 +4,14 @@ using System.Collections.Generic;
 
 namespace Kaitai
 {
-    public partial class T133Grande : KaitaiStruct
+    public partial class Trex : KaitaiStruct
     {
-        public static T133Grande FromFile(string fileName)
+        public static Trex FromFile(string fileName)
         {
-            return new T133Grande(new KaitaiStream(fileName));
+            return new Trex(new KaitaiStream(fileName));
         }
 
-        public T133Grande(KaitaiStream p__io, KaitaiStruct p__parent = null, T133Grande p__root = null) : base(p__io)
+        public Trex(KaitaiStream p__io, KaitaiStruct p__parent = null, Trex p__root = null) : base(p__io)
         {
             m_parent = p__parent;
             m_root = p__root ?? this;
@@ -19,7 +19,14 @@ namespace Kaitai
         }
         private void _read()
         {
-            _link = new Link(m_io, this, m_root);
+            _links = new List<Link>();
+            {
+                var i = 0;
+                while (!m_io.IsEof) {
+                    _links.Add(new Link(m_io, this, m_root));
+                    i++;
+                }
+            }
         }
         public partial class Link : KaitaiStruct
         {
@@ -28,7 +35,7 @@ namespace Kaitai
                 return new Link(new KaitaiStream(fileName));
             }
 
-            public Link(KaitaiStream p__io, T133Grande p__parent = null, T133Grande p__root = null) : base(p__io)
+            public Link(KaitaiStream p__io, Trex p__parent = null, Trex p__root = null) : base(p__io)
             {
                 m_parent = p__parent;
                 m_root = p__root;
@@ -36,8 +43,8 @@ namespace Kaitai
             }
             private void _read()
             {
-                _packages = new List<Package>((int) (32));
-                for (var i = 0; i < 32; i++)
+                _packages = new List<Package>((int) (4));
+                for (var i = 0; i < 4; i++)
                 {
                     _packages.Add(new Package(m_io, this, m_root));
                 }
@@ -45,12 +52,12 @@ namespace Kaitai
             }
             private List<Package> _packages;
             private AdditionalInfo _additionalInfo;
-            private T133Grande m_root;
-            private T133Grande m_parent;
+            private Trex m_root;
+            private Trex m_parent;
             public List<Package> Packages { get { return _packages; } }
             public AdditionalInfo AdditionalInfo { get { return _additionalInfo; } }
-            public T133Grande M_Root { get { return m_root; } }
-            public T133Grande M_Parent { get { return m_parent; } }
+            public Trex M_Root { get { return m_root; } }
+            public Trex M_Parent { get { return m_parent; } }
         }
         public partial class Package : KaitaiStruct
         {
@@ -59,7 +66,7 @@ namespace Kaitai
                 return new Package(new KaitaiStream(fileName));
             }
 
-            public Package(KaitaiStream p__io, T133Grande.Link p__parent = null, T133Grande p__root = null) : base(p__io)
+            public Package(KaitaiStream p__io, Trex.Link p__parent = null, Trex p__root = null) : base(p__io)
             {
                 m_parent = p__parent;
                 m_root = p__root;
@@ -80,16 +87,16 @@ namespace Kaitai
             private ushort _ms;
             private ushort _opticalLineLength;
             private uint _eventNumber;
-            private T133Grande m_root;
-            private T133Grande.Link m_parent;
+            private Trex m_root;
+            private Trex.Link m_parent;
             public ushort H { get { return _h; } }
             public ushort M { get { return _m; } }
             public ushort S { get { return _s; } }
             public ushort Ms { get { return _ms; } }
             public ushort OpticalLineLength { get { return _opticalLineLength; } }
             public uint EventNumber { get { return _eventNumber; } }
-            public T133Grande M_Root { get { return m_root; } }
-            public T133Grande.Link M_Parent { get { return m_parent; } }
+            public Trex M_Root { get { return m_root; } }
+            public Trex.Link M_Parent { get { return m_parent; } }
         }
         public partial class Header : KaitaiStruct
         {
@@ -98,7 +105,7 @@ namespace Kaitai
                 return new Header(new KaitaiStream(fileName));
             }
 
-            public Header(KaitaiStream p__io, T133Grande.AdditionalInfo p__parent = null, T133Grande p__root = null) : base(p__io)
+            public Header(KaitaiStream p__io, Trex.AdditionalInfo p__parent = null, Trex p__root = null) : base(p__io)
             {
                 m_parent = p__parent;
                 m_root = p__root;
@@ -121,8 +128,8 @@ namespace Kaitai
             private byte _requestAddress;
             private uint _eventNumber;
             private uint _vmeAddres;
-            private T133Grande m_root;
-            private T133Grande.AdditionalInfo m_parent;
+            private Trex m_root;
+            private Trex.AdditionalInfo m_parent;
             public byte[] Magic { get { return _magic; } }
             public byte[] TransferAttribute { get { return _transferAttribute; } }
             public byte Status { get { return _status; } }
@@ -130,8 +137,8 @@ namespace Kaitai
             public byte RequestAddress { get { return _requestAddress; } }
             public uint EventNumber { get { return _eventNumber; } }
             public uint VmeAddres { get { return _vmeAddres; } }
-            public T133Grande M_Root { get { return m_root; } }
-            public T133Grande.AdditionalInfo M_Parent { get { return m_parent; } }
+            public Trex M_Root { get { return m_root; } }
+            public Trex.AdditionalInfo M_Parent { get { return m_parent; } }
         }
         public partial class AdditionalInfo : KaitaiStruct
         {
@@ -140,7 +147,7 @@ namespace Kaitai
                 return new AdditionalInfo(new KaitaiStream(fileName));
             }
 
-            public AdditionalInfo(KaitaiStream p__io, T133Grande.Link p__parent = null, T133Grande p__root = null) : base(p__io)
+            public AdditionalInfo(KaitaiStream p__io, Trex.Link p__parent = null, Trex p__root = null) : base(p__io)
             {
                 m_parent = p__parent;
                 m_root = p__root;
@@ -171,8 +178,8 @@ namespace Kaitai
             private ushort _ms;
             private ushort _opticalLineLength;
             private uint _eventNumber;
-            private T133Grande m_root;
-            private T133Grande.Link m_parent;
+            private Trex m_root;
+            private Trex.Link m_parent;
             public Header Header { get { return _header; } }
             public List<ushort> Data { get { return _data; } }
             public byte ClusterNumber { get { return _clusterNumber; } }
@@ -182,14 +189,14 @@ namespace Kaitai
             public ushort Ms { get { return _ms; } }
             public ushort OpticalLineLength { get { return _opticalLineLength; } }
             public uint EventNumber { get { return _eventNumber; } }
-            public T133Grande M_Root { get { return m_root; } }
-            public T133Grande.Link M_Parent { get { return m_parent; } }
+            public Trex M_Root { get { return m_root; } }
+            public Trex.Link M_Parent { get { return m_parent; } }
         }
-        private Link _link;
-        private T133Grande m_root;
+        private List<Link> _links;
+        private Trex m_root;
         private KaitaiStruct m_parent;
-        public Link Link { get { return _link; } }
-        public T133Grande M_Root { get { return m_root; } }
+        public List<Link> Links { get { return _links; } }
+        public Trex M_Root { get { return m_root; } }
         public KaitaiStruct M_Parent { get { return m_parent; } }
     }
 }

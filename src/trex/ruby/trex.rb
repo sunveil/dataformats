@@ -6,14 +6,19 @@ unless Gem::Version.new(Kaitai::Struct::VERSION) >= Gem::Version.new('0.7')
   raise "Incompatible Kaitai Struct Ruby API: 0.7 or later is required, but you have #{Kaitai::Struct::VERSION}"
 end
 
-class T133Grande < Kaitai::Struct::Struct
+class Trex < Kaitai::Struct::Struct
   def initialize(_io, _parent = nil, _root = self)
     super(_io, _parent, _root)
     _read
   end
 
   def _read
-    @link = Link.new(@_io, self, @_root)
+    @links = []
+    i = 0
+    while not @_io.eof?
+      @links << Link.new(@_io, self, @_root)
+      i += 1
+    end
     self
   end
   class Link < Kaitai::Struct::Struct
@@ -23,8 +28,8 @@ class T133Grande < Kaitai::Struct::Struct
     end
 
     def _read
-      @packages = Array.new(32)
-      (32).times { |i|
+      @packages = Array.new(4)
+      (4).times { |i|
         @packages[i] = Package.new(@_io, self, @_root)
       }
       @additional_info = AdditionalInfo.new(@_io, self, @_root)
@@ -110,5 +115,5 @@ class T133Grande < Kaitai::Struct::Struct
     attr_reader :optical_line_length
     attr_reader :event_number
   end
-  attr_reader :link
+  attr_reader :links
 end

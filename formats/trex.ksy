@@ -1,18 +1,18 @@
 meta:
-  id: t133_grande
-  license: Unlicensed
+  id: trex
 seq:
-  - id: link
+  - id: links
     type: link
+    repeat: eos
 types:
   link:
     seq:
       - id: packages
         type: package
         repeat: expr
-        repeat-expr: 32
+        repeat-expr: 4
       - id: additional_info
-        type: additional_info  
+        type: additional_info      
   package:
     seq:
       - id: header
