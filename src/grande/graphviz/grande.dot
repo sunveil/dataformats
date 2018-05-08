@@ -1,0 +1,117 @@
+digraph {
+	rankdir=LR;
+	node [shape=plaintext];
+	subgraph cluster__grande {
+		label="Grande";
+		graph[style=dotted];
+
+		grande__seq [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+			<TR><TD BGCOLOR="#E0FFE0">pos</TD><TD BGCOLOR="#E0FFE0">size</TD><TD BGCOLOR="#E0FFE0">type</TD><TD BGCOLOR="#E0FFE0">id</TD></TR>
+			<TR><TD PORT="packages_pos">0</TD><TD PORT="packages_size">...</TD><TD>Package</TD><TD PORT="packages_type">packages</TD></TR>
+			<TR><TD COLSPAN="4" PORT="packages__repeat">repeat to end of stream</TD></TR>
+		</TABLE>>];
+		subgraph cluster__package {
+			label="Grande::Package";
+			graph[style=dotted];
+
+			package__seq [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD BGCOLOR="#E0FFE0">pos</TD><TD BGCOLOR="#E0FFE0">size</TD><TD BGCOLOR="#E0FFE0">type</TD><TD BGCOLOR="#E0FFE0">id</TD></TR>
+				<TR><TD PORT="data_type_pos">0</TD><TD PORT="data_type_size">2</TD><TD>u2le?DataTypes</TD><TD PORT="data_type_type">data_type</TD></TR>
+				<TR><TD PORT="package_size_pos">2</TD><TD PORT="package_size_size">2</TD><TD>u2le</TD><TD PORT="package_size_type">package_size</TD></TR>
+				<TR><TD PORT="event_number_pos">4</TD><TD PORT="event_number_size">4</TD><TD>u4le</TD><TD PORT="event_number_type">event_number</TD></TR>
+				<TR><TD PORT="error_count_pos">8</TD><TD PORT="error_count_size">4</TD><TD>u4le</TD><TD PORT="error_count_type">error_count</TD></TR>
+				<TR><TD PORT="time_pos">12</TD><TD PORT="time_size">8</TD><TD>Time</TD><TD PORT="time_type">time</TD></TR>
+				<TR><TD PORT="cluster_info_pos">20</TD><TD PORT="cluster_info_size">4</TD><TD>ClusterInfo</TD><TD PORT="cluster_info_type">cluster_info</TD></TR>
+				<TR><TD PORT="data_pos">24</TD><TD PORT="data_size">...</TD><TD>Data</TD><TD PORT="data_type">data</TD></TR>
+				<TR><TD COLSPAN="4" PORT="data__repeat">repeat 8 times</TD></TR>
+				<TR><TD PORT="end_of_package_pos">...</TD><TD PORT="end_of_package_size">4</TD><TD>FF FF FF FF</TD><TD PORT="end_of_package_type">end_of_package</TD></TR>
+			</TABLE>>];
+		}
+		subgraph cluster__cluster_info {
+			label="Grande::ClusterInfo";
+			graph[style=dotted];
+
+			cluster_info__seq [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD BGCOLOR="#E0FFE0">pos</TD><TD BGCOLOR="#E0FFE0">size</TD><TD BGCOLOR="#E0FFE0">type</TD><TD BGCOLOR="#E0FFE0">id</TD></TR>
+				<TR><TD PORT="cluster_number_pos">0</TD><TD PORT="cluster_number_size">1</TD><TD>b8</TD><TD PORT="cluster_number_type">cluster_number</TD></TR>
+				<TR><TD PORT="reserved_pos">1</TD><TD PORT="reserved_size">1</TD><TD>b8</TD><TD PORT="reserved_type">reserved</TD></TR>
+				<TR><TD PORT="optical_line_lenght_pos">2</TD><TD PORT="optical_line_lenght_size">2</TD><TD>b16</TD><TD PORT="optical_line_lenght_type">optical_line_lenght</TD></TR>
+			</TABLE>>];
+		}
+		subgraph cluster__data {
+			label="Grande::Data";
+			graph[style=dotted];
+
+			data__seq [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD BGCOLOR="#E0FFE0">pos</TD><TD BGCOLOR="#E0FFE0">size</TD><TD BGCOLOR="#E0FFE0">type</TD><TD BGCOLOR="#E0FFE0">id</TD></TR>
+				<TR><TD PORT="vme_addres_pos">0</TD><TD PORT="vme_addres_size">4</TD><TD>u4le</TD><TD PORT="vme_addres_type">vme_addres</TD></TR>
+				<TR><TD PORT="data_count_pos">4</TD><TD PORT="data_count_size">2</TD><TD>u2le</TD><TD PORT="data_count_type">data_count</TD></TR>
+				<TR><TD PORT="channel_info_pos">6</TD><TD PORT="channel_info_size">2</TD><TD>ChannelInfo</TD><TD PORT="channel_info_type">channel_info</TD></TR>
+				<TR><TD PORT="data_pos">8</TD><TD PORT="data_size">2</TD><TD>u2le</TD><TD PORT="data_type">data</TD></TR>
+				<TR><TD COLSPAN="4" PORT="data__repeat">repeat data_count times</TD></TR>
+			</TABLE>>];
+		}
+		subgraph cluster__channel_info {
+			label="Grande::ChannelInfo";
+			graph[style=dotted];
+
+			channel_info__seq [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD BGCOLOR="#E0FFE0">pos</TD><TD BGCOLOR="#E0FFE0">size</TD><TD BGCOLOR="#E0FFE0">type</TD><TD BGCOLOR="#E0FFE0">id</TD></TR>
+				<TR><TD PORT="channel_number_pos">0</TD><TD PORT="channel_number_size">4b</TD><TD>b4</TD><TD PORT="channel_number_type">channel_number</TD></TR>
+				<TR><TD PORT="bank_number_pos">0:4</TD><TD PORT="bank_number_size">1b</TD><TD>BitsType1</TD><TD PORT="bank_number_type">bank_number</TD></TR>
+				<TR><TD PORT="link_number_pos">0:5</TD><TD PORT="link_number_size">2b</TD><TD>b2</TD><TD PORT="link_number_type">link_number</TD></TR>
+				<TR><TD PORT="reserved_pos">0:7</TD><TD PORT="reserved_size">9b</TD><TD>b9</TD><TD PORT="reserved_type">reserved</TD></TR>
+			</TABLE>>];
+		}
+		subgraph cluster__time {
+			label="Grande::Time";
+			graph[style=dotted];
+
+			time__seq [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD BGCOLOR="#E0FFE0">pos</TD><TD BGCOLOR="#E0FFE0">size</TD><TD BGCOLOR="#E0FFE0">type</TD><TD BGCOLOR="#E0FFE0">id</TD></TR>
+				<TR><TD PORT="dat0_pos">0</TD><TD PORT="dat0_size">2</TD><TD>u2le</TD><TD PORT="dat0_type">dat0</TD></TR>
+				<TR><TD PORT="dat1_pos">2</TD><TD PORT="dat1_size">2</TD><TD>u2le</TD><TD PORT="dat1_type">dat1</TD></TR>
+				<TR><TD PORT="dat2_pos">4</TD><TD PORT="dat2_size">2</TD><TD>u2le</TD><TD PORT="dat2_type">dat2</TD></TR>
+				<TR><TD PORT="dat3_pos">6</TD><TD PORT="dat3_size">2</TD><TD>u2le</TD><TD PORT="dat3_type">dat3</TD></TR>
+			</TABLE>>];
+			time__inst__mls [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD BGCOLOR="#E0FFE0">id</TD><TD BGCOLOR="#E0FFE0">value</TD></TR>
+				<TR><TD>mls</TD><TD>((dat1 &amp; 2046) &gt;&gt; 1)</TD></TR>
+			</TABLE>>];
+			time__inst__dns [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD BGCOLOR="#E0FFE0">id</TD><TD BGCOLOR="#E0FFE0">value</TD></TR>
+				<TR><TD>dns</TD><TD>((dat0 &amp; 127) * 10)</TD></TR>
+			</TABLE>>];
+			time__inst__s [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD BGCOLOR="#E0FFE0">id</TD><TD BGCOLOR="#E0FFE0">value</TD></TR>
+				<TR><TD>s</TD><TD>(((dat1 &amp; 63488) &gt;&gt; 11) | ((dat2 &amp; 1) &lt;&lt; 5))</TD></TR>
+			</TABLE>>];
+			time__inst__h [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD BGCOLOR="#E0FFE0">id</TD><TD BGCOLOR="#E0FFE0">value</TD></TR>
+				<TR><TD>h</TD><TD>((dat2 &amp; 3968) &gt;&gt; 7)</TD></TR>
+			</TABLE>>];
+			time__inst__m [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD BGCOLOR="#E0FFE0">id</TD><TD BGCOLOR="#E0FFE0">value</TD></TR>
+				<TR><TD>m</TD><TD>((dat2 &amp; 126) &gt;&gt; 1)</TD></TR>
+			</TABLE>>];
+			time__inst__mks [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD BGCOLOR="#E0FFE0">id</TD><TD BGCOLOR="#E0FFE0">value</TD></TR>
+				<TR><TD>mks</TD><TD>(((dat0 &amp; 65408) &gt;&gt; 7) | ((dat1 &amp; 1) &lt;&lt; 9))</TD></TR>
+			</TABLE>>];
+		}
+	}
+	grande__seq:packages_type -> package__seq [style=bold];
+	package__seq:time_type -> time__seq [style=bold];
+	package__seq:cluster_info_type -> cluster_info__seq [style=bold];
+	package__seq:data_type -> data__seq [style=bold];
+	data__seq:channel_info_type -> channel_info__seq [style=bold];
+	data__seq:data_count_type -> data__seq:data__repeat [color="#404040"];
+	time__seq:dat1_type -> time__inst__mls [color="#404040"];
+	time__seq:dat0_type -> time__inst__dns [color="#404040"];
+	time__seq:dat1_type -> time__inst__s [color="#404040"];
+	time__seq:dat2_type -> time__inst__s [color="#404040"];
+	time__seq:dat2_type -> time__inst__h [color="#404040"];
+	time__seq:dat2_type -> time__inst__m [color="#404040"];
+	time__seq:dat0_type -> time__inst__mks [color="#404040"];
+	time__seq:dat1_type -> time__inst__mks [color="#404040"];
+}
