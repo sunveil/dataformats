@@ -16,9 +16,9 @@ digraph {
 
 			link__seq [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
 				<TR><TD BGCOLOR="#E0FFE0">pos</TD><TD BGCOLOR="#E0FFE0">size</TD><TD BGCOLOR="#E0FFE0">type</TD><TD BGCOLOR="#E0FFE0">id</TD></TR>
-				<TR><TD PORT="packages_pos">0</TD><TD PORT="packages_size">14</TD><TD>Package</TD><TD PORT="packages_type">packages</TD></TR>
+				<TR><TD PORT="packages_pos">0</TD><TD PORT="packages_size">...</TD><TD>Package</TD><TD PORT="packages_type">packages</TD></TR>
 				<TR><TD COLSPAN="4" PORT="packages__repeat">repeat 4 times</TD></TR>
-				<TR><TD PORT="additional_info_pos">56</TD><TD PORT="additional_info_size">...</TD><TD>AdditionalInfo</TD><TD PORT="additional_info_type">additional_info</TD></TR>
+				<TR><TD PORT="additional_info_pos">...</TD><TD PORT="additional_info_size">...</TD><TD>AdditionalInfo</TD><TD PORT="additional_info_type">additional_info</TD></TR>
 			</TABLE>>];
 		}
 		subgraph cluster__package {
@@ -27,12 +27,10 @@ digraph {
 
 			package__seq [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
 				<TR><TD BGCOLOR="#E0FFE0">pos</TD><TD BGCOLOR="#E0FFE0">size</TD><TD BGCOLOR="#E0FFE0">type</TD><TD BGCOLOR="#E0FFE0">id</TD></TR>
-				<TR><TD PORT="h_pos">0</TD><TD PORT="h_size">2</TD><TD>u2le</TD><TD PORT="h_type">h</TD></TR>
-				<TR><TD PORT="m_pos">2</TD><TD PORT="m_size">2</TD><TD>u2le</TD><TD PORT="m_type">m</TD></TR>
-				<TR><TD PORT="s_pos">4</TD><TD PORT="s_size">2</TD><TD>u2le</TD><TD PORT="s_type">s</TD></TR>
-				<TR><TD PORT="ms_pos">6</TD><TD PORT="ms_size">2</TD><TD>u2le</TD><TD PORT="ms_type">ms</TD></TR>
-				<TR><TD PORT="optical_line_length_pos">8</TD><TD PORT="optical_line_length_size">2</TD><TD>u2le</TD><TD PORT="optical_line_length_type">optical_line_length</TD></TR>
-				<TR><TD PORT="event_number_pos">10</TD><TD PORT="event_number_size">4</TD><TD>u4le</TD><TD PORT="event_number_type">event_number</TD></TR>
+				<TR><TD PORT="header_pos">0</TD><TD PORT="header_size">15</TD><TD>Header</TD><TD PORT="header_type">header</TD></TR>
+				<TR><TD PORT="data_pos">15</TD><TD PORT="data_size">2</TD><TD>u2le</TD><TD PORT="data_type">data</TD></TR>
+				<TR><TD COLSPAN="4" PORT="data__repeat">repeat ((header.package_size - 9) / 2) times</TD></TR>
+				<TR><TD PORT="cluster_number_pos">...</TD><TD PORT="cluster_number_size">1</TD><TD>u1</TD><TD PORT="cluster_number_type">cluster_number</TD></TR>
 			</TABLE>>];
 		}
 		subgraph cluster__header {
@@ -72,6 +70,8 @@ digraph {
 	trex__seq:links_type -> link__seq [style=bold];
 	link__seq:packages_type -> package__seq [style=bold];
 	link__seq:additional_info_type -> additional_info__seq [style=bold];
+	package__seq:header_type -> header__seq [style=bold];
+	header__seq:package_size_type -> package__seq:data__repeat [color="#404040"];
 	additional_info__seq:header_type -> header__seq [style=bold];
 	header__seq:package_size_type -> additional_info__seq:data__repeat [color="#404040"];
 }

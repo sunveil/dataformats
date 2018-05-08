@@ -123,42 +123,28 @@ sub new {
 sub _read {
     my ($self) = @_;
 
-    $self->{h} = $self->{_io}->read_u2le();
-    $self->{m} = $self->{_io}->read_u2le();
-    $self->{s} = $self->{_io}->read_u2le();
-    $self->{ms} = $self->{_io}->read_u2le();
-    $self->{optical_line_length} = $self->{_io}->read_u2le();
-    $self->{event_number} = $self->{_io}->read_u4le();
+    $self->{header} = Trex::Header->new($self->{_io}, $self, $self->{_root});
+    $self->{data} = ();
+    my $n_data = int(($self->header()->package_size() - 9) / 2);
+    for (my $i = 0; $i < $n_data; $i++) {
+        $self->{data}[$i] = $self->{_io}->read_u2le();
+    }
+    $self->{cluster_number} = $self->{_io}->read_u1();
 }
 
-sub h {
+sub header {
     my ($self) = @_;
-    return $self->{h};
+    return $self->{header};
 }
 
-sub m {
+sub data {
     my ($self) = @_;
-    return $self->{m};
+    return $self->{data};
 }
 
-sub s {
+sub cluster_number {
     my ($self) = @_;
-    return $self->{s};
-}
-
-sub ms {
-    my ($self) = @_;
-    return $self->{ms};
-}
-
-sub optical_line_length {
-    my ($self) = @_;
-    return $self->{optical_line_length};
-}
-
-sub event_number {
-    my ($self) = @_;
-    return $self->{event_number};
+    return $self->{cluster_number};
 }
 
 ########################################################################

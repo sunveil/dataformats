@@ -54,12 +54,12 @@ var Trex = (function() {
       this._read();
     }
     Package.prototype._read = function() {
-      this.h = this._io.readU2le();
-      this.m = this._io.readU2le();
-      this.s = this._io.readU2le();
-      this.ms = this._io.readU2le();
-      this.opticalLineLength = this._io.readU2le();
-      this.eventNumber = this._io.readU4le();
+      this.header = new Header(this._io, this, this._root);
+      this.data = new Array(Math.floor((this.header.packageSize - 9) / 2));
+      for (var i = 0; i < Math.floor((this.header.packageSize - 9) / 2); i++) {
+        this.data[i] = this._io.readU2le();
+      }
+      this.clusterNumber = this._io.readU1();
     }
 
     return Package;

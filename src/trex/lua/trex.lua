@@ -52,12 +52,12 @@ function Trex.Package:_init(io, parent, root)
 end
 
 function Trex.Package:_read()
-  self.h = self._io:read_u2le()
-  self.m = self._io:read_u2le()
-  self.s = self._io:read_u2le()
-  self.ms = self._io:read_u2le()
-  self.optical_line_length = self._io:read_u2le()
-  self.event_number = self._io:read_u4le()
+  self.header = Trex.Header(self._io, self, self._root)
+  self.data = {}
+  for i = 1, ((self.header.package_size - 9) / 2) do
+    self.data[i] = self._io:read_u2le()
+  end
+  self.cluster_number = self._io:read_u1()
 end
 
 

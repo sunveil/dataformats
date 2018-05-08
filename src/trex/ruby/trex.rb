@@ -45,20 +45,17 @@ class Trex < Kaitai::Struct::Struct
     end
 
     def _read
-      @h = @_io.read_u2le
-      @m = @_io.read_u2le
-      @s = @_io.read_u2le
-      @ms = @_io.read_u2le
-      @optical_line_length = @_io.read_u2le
-      @event_number = @_io.read_u4le
+      @header = Header.new(@_io, self, @_root)
+      @data = Array.new(((header.package_size - 9) / 2))
+      (((header.package_size - 9) / 2)).times { |i|
+        @data[i] = @_io.read_u2le
+      }
+      @cluster_number = @_io.read_u1
       self
     end
-    attr_reader :h
-    attr_reader :m
-    attr_reader :s
-    attr_reader :ms
-    attr_reader :optical_line_length
-    attr_reader :event_number
+    attr_reader :header
+    attr_reader :data
+    attr_reader :cluster_number
   end
   class Header < Kaitai::Struct::Struct
     def initialize(_io, _parent = nil, _root = self)

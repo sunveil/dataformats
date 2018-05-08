@@ -90,27 +90,21 @@ public class Trex extends KaitaiStruct {
             _read();
         }
         private void _read() {
-            this.h = this._io.readU2le();
-            this.m = this._io.readU2le();
-            this.s = this._io.readU2le();
-            this.ms = this._io.readU2le();
-            this.opticalLineLength = this._io.readU2le();
-            this.eventNumber = this._io.readU4le();
+            this.header = new Header(this._io, this, _root);
+            data = new ArrayList<Integer>((int) (((header().packageSize() - 9) / 2)));
+            for (int i = 0; i < ((header().packageSize() - 9) / 2); i++) {
+                this.data.add(this._io.readU2le());
+            }
+            this.clusterNumber = this._io.readU1();
         }
-        private int h;
-        private int m;
-        private int s;
-        private int ms;
-        private int opticalLineLength;
-        private long eventNumber;
+        private Header header;
+        private ArrayList<Integer> data;
+        private int clusterNumber;
         private Trex _root;
         private Trex.Link _parent;
-        public int h() { return h; }
-        public int m() { return m; }
-        public int s() { return s; }
-        public int ms() { return ms; }
-        public int opticalLineLength() { return opticalLineLength; }
-        public long eventNumber() { return eventNumber; }
+        public Header header() { return header; }
+        public ArrayList<Integer> data() { return data; }
+        public int clusterNumber() { return clusterNumber; }
         public Trex _root() { return _root; }
         public Trex.Link _parent() { return _parent; }
     }
@@ -123,11 +117,11 @@ public class Trex extends KaitaiStruct {
             this(_io, null, null);
         }
 
-        public Header(KaitaiStream _io, Trex.AdditionalInfo _parent) {
+        public Header(KaitaiStream _io, KaitaiStruct _parent) {
             this(_io, _parent, null);
         }
 
-        public Header(KaitaiStream _io, Trex.AdditionalInfo _parent, Trex _root) {
+        public Header(KaitaiStream _io, KaitaiStruct _parent, Trex _root) {
             super(_io);
             this._parent = _parent;
             this._root = _root;
@@ -150,7 +144,7 @@ public class Trex extends KaitaiStruct {
         private long eventNumber;
         private long vmeAddres;
         private Trex _root;
-        private Trex.AdditionalInfo _parent;
+        private KaitaiStruct _parent;
         public byte[] magic() { return magic; }
         public byte[] transferAttribute() { return transferAttribute; }
         public int status() { return status; }
@@ -159,7 +153,7 @@ public class Trex extends KaitaiStruct {
         public long eventNumber() { return eventNumber; }
         public long vmeAddres() { return vmeAddres; }
         public Trex _root() { return _root; }
-        public Trex.AdditionalInfo _parent() { return _parent; }
+        public KaitaiStruct _parent() { return _parent; }
     }
     public static class AdditionalInfo extends KaitaiStruct {
         public static AdditionalInfo fromFile(String fileName) throws IOException {

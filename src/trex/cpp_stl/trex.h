@@ -66,22 +66,16 @@ public:
         ~package_t();
 
     private:
-        uint16_t m_h;
-        uint16_t m_m;
-        uint16_t m_s;
-        uint16_t m_ms;
-        uint16_t m_optical_line_length;
-        uint32_t m_event_number;
+        header_t* m_header;
+        std::vector<uint16_t>* m_data;
+        uint8_t m_cluster_number;
         trex_t* m__root;
         trex_t::link_t* m__parent;
 
     public:
-        uint16_t h() const { return m_h; }
-        uint16_t m() const { return m_m; }
-        uint16_t s() const { return m_s; }
-        uint16_t ms() const { return m_ms; }
-        uint16_t optical_line_length() const { return m_optical_line_length; }
-        uint32_t event_number() const { return m_event_number; }
+        header_t* header() const { return m_header; }
+        std::vector<uint16_t>* data() const { return m_data; }
+        uint8_t cluster_number() const { return m_cluster_number; }
         trex_t* _root() const { return m__root; }
         trex_t::link_t* _parent() const { return m__parent; }
     };
@@ -90,7 +84,7 @@ public:
 
     public:
 
-        header_t(kaitai::kstream* p__io, trex_t::additional_info_t* p__parent = 0, trex_t* p__root = 0);
+        header_t(kaitai::kstream* p__io, kaitai::kstruct* p__parent = 0, trex_t* p__root = 0);
 
     private:
         void _read();
@@ -107,7 +101,7 @@ public:
         uint32_t m_event_number;
         uint32_t m_vme_addres;
         trex_t* m__root;
-        trex_t::additional_info_t* m__parent;
+        kaitai::kstruct* m__parent;
 
     public:
         std::string magic() const { return m_magic; }
@@ -118,7 +112,7 @@ public:
         uint32_t event_number() const { return m_event_number; }
         uint32_t vme_addres() const { return m_vme_addres; }
         trex_t* _root() const { return m__root; }
-        trex_t::additional_info_t* _parent() const { return m__parent; }
+        kaitai::kstruct* _parent() const { return m__parent; }
     };
 
     class additional_info_t : public kaitai::kstruct {

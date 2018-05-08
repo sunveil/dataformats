@@ -59,18 +59,22 @@ trex_t::package_t::package_t(kaitai::kstream* p__io, trex_t::link_t* p__parent, 
 }
 
 void trex_t::package_t::_read() {
-    m_h = m__io->read_u2le();
-    m_m = m__io->read_u2le();
-    m_s = m__io->read_u2le();
-    m_ms = m__io->read_u2le();
-    m_optical_line_length = m__io->read_u2le();
-    m_event_number = m__io->read_u4le();
+    m_header = new header_t(m__io, this, m__root);
+    int l_data = ((header()->package_size() - 9) / 2);
+    m_data = new std::vector<uint16_t>();
+    m_data->reserve(l_data);
+    for (int i = 0; i < l_data; i++) {
+        m_data->push_back(m__io->read_u2le());
+    }
+    m_cluster_number = m__io->read_u1();
 }
 
 trex_t::package_t::~package_t() {
+    delete m_header;
+    delete m_data;
 }
 
-trex_t::header_t::header_t(kaitai::kstream* p__io, trex_t::additional_info_t* p__parent, trex_t* p__root) : kaitai::kstruct(p__io) {
+trex_t::header_t::header_t(kaitai::kstream* p__io, kaitai::kstruct* p__parent, trex_t* p__root) : kaitai::kstruct(p__io) {
     m__parent = p__parent;
     m__root = p__root;
     _read();

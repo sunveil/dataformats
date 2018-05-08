@@ -50,31 +50,26 @@ class Package extends \Kaitai\Struct\Struct {
     }
 
     private function _read() {
-        $this->_m_h = $this->_io->readU2le();
-        $this->_m_m = $this->_io->readU2le();
-        $this->_m_s = $this->_io->readU2le();
-        $this->_m_ms = $this->_io->readU2le();
-        $this->_m_opticalLineLength = $this->_io->readU2le();
-        $this->_m_eventNumber = $this->_io->readU4le();
+        $this->_m_header = new \Trex\Header($this->_io, $this, $this->_root);
+        $this->_m_data = [];
+        $n = intval(($this->header()->packageSize() - 9) / 2);
+        for ($i = 0; $i < $n; $i++) {
+            $this->_m_data[] = $this->_io->readU2le();
+        }
+        $this->_m_clusterNumber = $this->_io->readU1();
     }
-    protected $_m_h;
-    protected $_m_m;
-    protected $_m_s;
-    protected $_m_ms;
-    protected $_m_opticalLineLength;
-    protected $_m_eventNumber;
-    public function h() { return $this->_m_h; }
-    public function m() { return $this->_m_m; }
-    public function s() { return $this->_m_s; }
-    public function ms() { return $this->_m_ms; }
-    public function opticalLineLength() { return $this->_m_opticalLineLength; }
-    public function eventNumber() { return $this->_m_eventNumber; }
+    protected $_m_header;
+    protected $_m_data;
+    protected $_m_clusterNumber;
+    public function header() { return $this->_m_header; }
+    public function data() { return $this->_m_data; }
+    public function clusterNumber() { return $this->_m_clusterNumber; }
 }
 
 namespace \Trex;
 
 class Header extends \Kaitai\Struct\Struct {
-    public function __construct(\Kaitai\Struct\Stream $_io, \Trex\AdditionalInfo $_parent = null, \Trex $_root = null) {
+    public function __construct(\Kaitai\Struct\Stream $_io, \Kaitai\Struct\Struct $_parent = null, \Trex $_root = null) {
         parent::__construct($_io, $_parent, $_root);
         $this->_read();
     }

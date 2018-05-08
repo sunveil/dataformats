@@ -45,12 +45,12 @@ class Trex(KaitaiStruct):
             self._read()
 
         def _read(self):
-            self.h = self._io.read_u2le()
-            self.m = self._io.read_u2le()
-            self.s = self._io.read_u2le()
-            self.ms = self._io.read_u2le()
-            self.optical_line_length = self._io.read_u2le()
-            self.event_number = self._io.read_u4le()
+            self.header = self._root.Header(self._io, self, self._root)
+            self.data = [None] * ((self.header.package_size - 9) // 2)
+            for i in range((self.header.package_size - 9) // 2):
+                self.data[i] = self._io.read_u2le()
+
+            self.cluster_number = self._io.read_u1()
 
 
     class Header(KaitaiStruct):
