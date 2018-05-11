@@ -24,19 +24,6 @@ types:
         repeat-expr: (header.package_size - 9) / 2
       - id: cluster_number
         type: u1
-    seq:
-      - id: h
-        type: u2le
-      - id: m
-        type: u2le
-      - id: s
-        type: u2le
-      - id: ms
-        type: u2le
-      - id: optical_line_length
-        type: u2le
-      - id: event_number
-        type: u4le
   header:
     seq:
       - id: magic
