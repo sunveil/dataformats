@@ -1,15 +1,17 @@
 import trex
 import grande
+import t133
 import fnmatch
 import sys
 import os
+import argparse
 
 
 def main():
-    args_len = len(sys.argv)
-    if args_len != 2:
-        raise Exception('Not enough actual parameters')
-    root_dir = sys.argv[1]
+    parser = argparse.ArgumentParser()
+    parser.add_argument('folder', help='input folder for processing')
+    args = parser.parse_args()
+    root_dir = args.folder
     is_dir = os.path.isdir(root_dir)
     if not is_dir:
         raise Exception('It is not a directory')
@@ -44,6 +46,13 @@ def open_trex(file_name):
         return None
 
 
+def open_t133(file_name):
+    try:
+        return t133.T133.from_file(file_name)
+    except:
+        return None
+
+
 def open(file_name):
     grande = open_grande(file_name)
     if grande is not None:
@@ -51,6 +60,9 @@ def open(file_name):
     trex = open_trex(file_name)
     if trex is not None:
         return trex
+    t133 = open_t133(file_name)
+    if t133 is not None:
+        return t133
     return None
 
 
@@ -60,6 +72,9 @@ def print_info(reader, path):
         print('Packages  count', len(reader.packages), sep=': ')
         return
     if type(reader) is trex.Trex:
+        print('File:', path, end=' - ')
+        print('Links count', len(reader.links), sep=': ')
+    if type(reader) is t133.T133:
         print('File:', path, end=' - ')
         print('Links count', len(reader.links), sep=': ')
 
